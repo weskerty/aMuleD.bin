@@ -1,0 +1,14 @@
+<script>
+try {
+  const h = location.hostname;
+  const p = location.pathname.split('/').filter(Boolean);
+  const u = h.split('.')[0];
+  
+  let b = '';
+  if (h === u + '.github.io' && p.length) b = '/' + p[0];
+  
+  location.href = b + '/';
+} catch {
+  location.href = 'https://weskerty.github.io/CentralPage/';
+}
+</script>

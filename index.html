@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>🛍️ Yo Gano PY</title>
+  
+  <meta property="og:title" content="🛍️ Yo Gano PY">
+
+  <!-- SEO-->
+  <meta name="description" content="Yo Gano PY: Tienda online de alimentos, accesorios y boletos. Compra fácil y seguro en Paraguay.">
+
+ 
+
+
+  
+  <meta property="og:description" content="Yo Gano PY: Tienda online de alimentos, accesorios y boletos. Compra fácil y seguro en Paraguay.">
+  
+  <!--
+  
+  <meta property="og:url" content="">
+ 
+  <link rel="canonical" href=""> 
+ 
+  <meta property="og:image" content="ICON.png">
+  
+ 
+  
+  -->
+  
+  <!-- Icono Pestaña -->
+  <link rel="icon" type="image/x-icon" href="web/favicon.ico">
+  <link rel="apple-touch-icon" href="web/ICON.png">
+ 
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:type" content="website">
+  
+  
+
+
+ 
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Conf PWA -->
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="YoGanoPY">
+
+
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  
+
+  <!-- Preload recursos -->
+  <link rel="preload" href="web/estilo.css" as="style">
+  <link rel="preload" href="web/scripts/Otros/core.js" as="script">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="web/estilo.css">
+</head>
+
+<body>
+
+  <!-- Pantalla de carga -->
+  <div class="loading-screen" id="loading-screen">
+    <p>⌛Cargando⏳</p>
+  </div>
+
+  <!-- Video fondo -->
+  <video autoplay muted loop id="bg-video" preload="auto">
+    <source src="" type="video/mp4">
+  </video>
+
+  <!-- Contenido SPA -->
+  <div class="content" id="content">
+    <p>⌛Cargando⏳</p>
+  </div>
+
+  <!-- Disqus -->
+  <div id="disqus-container"></div>
+
+  <!-- Librerías externas con fallback local -->
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js"
+          onerror="this.src='web/scripts/Otros/MarkDownIT/markdown-it.min.js'"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it-anchor@9/dist/markdownItAnchor.umd.min.js"
+          onerror="this.src='web/scripts/Otros/MarkDownIT/markdownItAnchor.umd.min.js'"></script>
+
+  <!-- Core SPA -->
+  <script src="web/scripts/Otros/core.js"></script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js');
+    }
+  </script>
+
+  <noscript>JavaScript OFF. Se requiere JS activado</noscript>
+
+</body>
+</html>

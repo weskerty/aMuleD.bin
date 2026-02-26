@@ -1,0 +1,140 @@
+<style>
+#content {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+
+#disqus-container {
+  display: none !important;
+}
+
+.pc-wrap * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.pc-wrap {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  color: #fff;
+  padding: 16px;
+}
+
+.pc-wrap h1 {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: 6px;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.pc-sub {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  opacity: .88;
+}
+
+.pc-hd {
+  text-align: center;
+  padding: 12px 0 6px;
+}
+
+.pc-ml {
+  width: 100%;
+  max-width: 650px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 16px auto 0;
+}
+
+@media (min-width: 480px) {
+  .pc-ml {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pc-mi {
+  padding: 14px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(41, 41, 41, .5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  text-decoration: none;
+  color: #fff;
+  transition: transform .25s ease, background .25s ease;
+  min-height: 80px;
+}
+
+.pc-mi:hover {
+  transform: translateY(-2px);
+  background: rgba(41, 41, 41, .65);
+  text-decoration: none;
+}
+
+.pc-mc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+
+.pc-mc h3 {
+  font-size: clamp(1.1rem, 2.5vw, 1.6em);
+  margin: 0;
+}
+
+.pc-mc p {
+  font-size: clamp(0.92rem, 1.8vw, 1.2rem);
+  color: rgba(255, 255, 255, .85);
+  line-height: 1.35;
+  margin: 0;
+}
+</style>
+
+<div class="pc-wrap">
+  <div class="pc-hd">
+    <img src="web/ICON.png" width="159px" />
+    <p class="pc-sub">Select where you want to go 🤗</p>
+  </div>
+  <div class="pc-ml">
+    <a href="web/otros/Archivos/MarkDowns/install.md" class="pc-mi">
+      <div class="pc-mc">
+        <h3>📦 Install </h3>
+        <p>Install on PC or Phone</p>
+      </div>
+    </a>
+    <a href="web/otros/Archivos/MarkDowns/demo.md" class="pc-mi" >
+      <div class="pc-mc">
+        <h3>🤨 What is it?</h3>
+        <p>Brief explanatory tour</p>
+      </div>
+    </a>
+    <a href="web/otros/Archivos/MarkDowns/groups.md" class="pc-mi" >
+      <div class="pc-mc">
+        <h3>🫂 Support Groups</h3>
+        <p>Places where you can ask about anything 🤗</p>
+      </div>
+    </a>
+    <a href="web/otros/Archivos/MarkDowns/proyects.md" class="pc-mi">
+      <div class="pc-mc">
+        <h3>⚡ More Tools</h3>
+        <p>P2P Powers & Cheats</p>
+      </div>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,76 @@
+{
+  "backgrounds": [
+    {
+      "month": 0,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/5834608/5834608-hd_1280_720_25fps.mp4",
+      "comment": "Enero Año Nuvo"
+    },
+    {
+      "month": 1,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/8279906/8279906-hd_1280_720_24fps.mp4",
+      "comment": "Febrero"
+    },
+    {
+      "month": 2,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/35374624/14988399_1280_720_30fps.mp4",
+      "comment": "Marzo"
+    },
+    {
+      "month": 3,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/35374624/14988399_1280_720_30fps.mp4",
+      "comment": "Abril"
+    },
+    {
+      "month": 4,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/35374624/14988399_1280_720_30fps.mp4",
+      "comment": "Mayo"
+    },
+    {
+      "month": 5,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/35374624/14988399_1280_720_30fps.mp4",
+      "comment": "Junio"
+    },
+    {
+      "month": 6,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/35374624/14988399_1280_720_30fps.mp4",
+      "comment": "Julio"
+    },
+    {
+      "month": 7,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/6157145/6157145-hd_1366_720_25fps.mp4",
+      "comment": "Agosto"
+    },
+    {
+      "month": 8,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/35374624/14988399_1280_720_30fps.mp4",
+      "comment": "Septiembre"
+    },
+    {
+      "month": 9,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/35374624/14988399_1280_720_30fps.mp4",
+      "comment": "Octubre"
+    },
+    {
+      "month": 10,
+      "type": "video",
+      "src": "https://videos.pexels.com/video-files/4957757/4957757-hd_1280_720_50fps.mp4",
+      "comment": "Noviembre"
+    },
+    {
+      "month": 11,
+      "type": "video",
+      "src": "https://github.com/user-attachments/assets/b746d91d-55ae-4679-add6-fcf71e05dcd4",
+      "comment": "Diciembre - Video navideño"
+    }
+  ]
+}
