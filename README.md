@@ -1,6 +1,6 @@
 <div style="text-align:center;"
 <p align="center">
-<img src="web/ICON.png" alt="Muly" width="100">
+<img src="web/ICON.png" alt="Muly" width="150">
 <h1 align="center">aMuleD</h1>
 1. aMule for All Platforms. Unify all efforts into aMuleD.
 Linux x64 & ARM64/v7 is compatible with Termux Debian and also with Windows WSL.
@@ -23,8 +23,8 @@ Reuse, don't throw away.
 
   <table>
     <tr>
-      <td><img width="400" src="https://github.com/user-attachments/assets/758691b0-f092-4aae-ba91-e433878b0a02" /></td>
-      <td><img width="400" src="https://github.com/user-attachments/assets/13e525fc-75aa-42d0-948a-de9568ece95a" /></td>
+      <td><img width="400" src="https://github.com/user-attachments/assets/d98ca640-98be-45d0-98ab-b7ef814957af" /></td>
+      <td><img width="400" src="" /></td>
     </tr>
   </table>
 
