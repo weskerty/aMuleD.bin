@@ -45,9 +45,9 @@ run_fallback() {
 }
 
 if [[ "$OS" == "win" ]]; then
-  "$BIN" --full-daemon || { echo "Error $BIN"; exit 1; }
+  "$BIN" --full-daemon --config-dir=.aMule || { echo "Error $BIN"; exit 1; }
 else
-  "$BIN" --full-daemon || run_fallback "$BIN"
+  "$BIN" --full-daemon --config-dir=.aMule || run_fallback "$BIN"
 fi
 
 cd MuLy || echo No MuLy Path && exit 1
