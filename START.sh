@@ -4,7 +4,8 @@ cd repo
 git fetch origin
 git reset --hard origin/master
 
-chmod +x Util/aMuleD.AppImage/*.AppImage Util/aMuleD.AppImage/*.exe 2>/dev/null
+chmod -R +x Util/aMuleD.AppImage/
+
 
 detect_arch() {
   case "$(uname -m)" in
