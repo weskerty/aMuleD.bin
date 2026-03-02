@@ -42,7 +42,8 @@ node_modules/
 jspm_packages/
 MuLy/node_modules/
 MuLy/package-lock.json
-MuLy/Archivos/*
+MuLy/Archivos
+.aMule
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
