@@ -80,6 +80,7 @@ rm -rf aMuleD.bin
 git clone https://github.com/weskerty/aMuleD.bin.git repo
 
 echo "[D] "
+
 mkdir -p /sdcard/Download/aMule
 
 echo "[D] Descargas estaran en tu Carpeta Descargas."
@@ -87,6 +88,7 @@ ln -sfn /sdcard/Download/aMule repo/MuLy/Archivos
 
 echo "[D] Actualizando"
 cd repo
+cp -r .aMule ~/.aMule
 chmod +x START.sh
 ./START.sh &
 sleep 20
