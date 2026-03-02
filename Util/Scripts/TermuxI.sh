@@ -57,7 +57,7 @@ while [ $timeout -gt 0 ]; do
         echo -e "Editing the Levanter Configuration: ${YELLOW}msedit config.env${NC} with Ctrl+O Save, Enter and Ctrl+X Exit msedit."
         echo -e "${GREEN} Need Help? Contact Us on GitHub ${NC}"
 
-        exit 0
+    
     fi
 
     timeout=$((timeout - 1))
