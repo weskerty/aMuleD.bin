@@ -5,6 +5,7 @@ git fetch origin
 git reset --hard origin/master
 
 chmod -R +x Util/aMuleD.AppImage/
+rm ~/.aMule/muleLock && rm .aMule/muleLock
 
 detect_arch() {
   case "$(uname -m)" in
