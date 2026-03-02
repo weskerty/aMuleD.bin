@@ -6,7 +6,6 @@ git reset --hard origin/master
 
 chmod -R +x Util/aMuleD.AppImage/
 
-
 detect_arch() {
   case "$(uname -m)" in
     aarch64|arm64) echo "arm64" ;;
@@ -36,21 +35,23 @@ else
   BIN="Util/aMuleD.AppImage/amuled-${ARCH}.AppImage"
 fi
 
+FLAGS="--full-daemon --config-dir=.aMule"
+
 run_fallback() {
   local bin="$1"
   local extract_dir="../home/amuled"
   mkdir -p "$extract_dir"
-  "$bin" --appimage-extract-and-run 2>/dev/null || \
-  (cd "$extract_dir" && "$OLDPWD/$bin" --appimage-extract && ./squashfs-root/usr/bin/amuled &)
+  "$bin" --appimage-extract-and-run $FLAGS 2>/dev/null || \
+  (cd "$extract_dir" && "$OLDPWD/$bin" --appimage-extract && ./squashfs-root/usr/bin/amuled $FLAGS &)
 }
 
 if [[ "$OS" == "win" ]]; then
-  "$BIN" --full-daemon --config-dir=.aMule || { echo "Error $BIN"; exit 1; }
+  "$BIN" $FLAGS || { echo "Error $BIN"; exit 1; }
 else
-  "$BIN" --full-daemon --config-dir=.aMule || run_fallback "$BIN"
+  "$BIN" $FLAGS || run_fallback "$BIN"
 fi
 
-cd MuLy || echo No MuLy Path && exit 1
+cd MuLy || { echo "No MuLy Path"; exit 1; }
 
 VOLTA_NPM="/opt/aMuleD.bin/home/.volta/bin/npm"
 
