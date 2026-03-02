@@ -50,7 +50,7 @@ else
   "$BIN" --full-daemon || run_fallback "$BIN"
 fi
 
-cd MuLy || exit 1
+cd MuLy || echo No MuLy Path && exit 1
 
 VOLTA_NPM="/opt/aMuleD.bin/home/.volta/bin/npm"
 
