@@ -64,7 +64,6 @@ proot-distro login debian -- bash -c 'cd repo 2>/dev/null || true && chmod +x ST
 EOF
 
 proot-distro login debian -- bash -c '
-set -e
 
 apt-get update -y
 apt-get upgrade -y
@@ -79,15 +78,15 @@ echo "[D] "
 mkdir -p /sdcard/Download/MuLy
 
 echo "[D] Descargas estaran en tu Carpeta Descargas."
-ln -sfn /sdcard/Download/aMule repo/MuLy/Archivos
+ln -sfn /sdcard/Download/MuLy repo/MuLy/Archivos
 
 echo "[D] Actualizando"
 cd repo
 cp -r .aMule ~/.aMule
 chmod +x START.sh
-./START.sh &
-sleep 20
+/data/data/com.termux/files/usr/bin/termux-open "localhost:6859"
 echo "[D] Iniciando" 
- /data/data/com.termux/files/usr/bin/termux-open "localhost:6859"
+./START.sh 
+
 '
 
