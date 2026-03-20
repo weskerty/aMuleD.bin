@@ -17,7 +17,7 @@ apt update -y && yes | apt upgrade && pkg install -y proot-distro git wget termu
 
 
 
-proot-distro install archlinux
+proot-distro install debian
 
 cat > ~/.bashrc <<'EOF'
 termux-wake-lock
