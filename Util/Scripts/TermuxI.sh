@@ -59,15 +59,16 @@ fi
 echo
 echo -e "${G}Iniciando aMuleD / Starting aMuleD${N}"
 
-proot-distro login archlinux -- bash -c 'cd repo 2>/dev/null || true && chmod +x START.sh && (sleep 20 && /data/data/com.termux/files/usr/bin/termux-open http://localhost:6859) && ./START.sh'
+proot-distro login debian -- bash -c 'cd repo 2>/dev/null || true && chmod +x START.sh && (sleep 20 && /data/data/com.termux/files/usr/bin/termux-open http://localhost:6859) && ./START.sh'
 
 EOF
 
-proot-distro login archlinux -- bash -c '
+proot-distro login debian -- bash -c '
 set -e
 
-pacman -Syu --noconfirm
-pacman -S git wget ffmpeg nodejs nano python3 --noconfirm
+apt-get update -y
+apt-get upgrade -y
+apt-get install git wget ffmpeg nodejs nano python3 -y
 
 echo "[D] Repo MuLy"
 rm -rf aMuleD.bin
