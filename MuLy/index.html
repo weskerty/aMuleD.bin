@@ -21,9 +21,8 @@
     <div class="ml-sub">MuLy</div>
     <label class="ml-label">Password</label>
     <input class="ml-input" type="password" id="pw-input"
-      placeholder="0"
-      autocomplete="current-password" autocorrect="off"
-      spellcheck="false" enterkeyhint="go">
+      placeholder="0" autocomplete="current-password"
+      autocorrect="off" spellcheck="false" enterkeyhint="go">
     <button class="ml-btn" id="login-btn">Conectar</button>
     <div class="ml-error" id="login-error"></div>
   </div>
@@ -32,13 +31,11 @@
 <div id="app" style="display:none">
   <div class="ml-main">
 
-    <div class="ml-panel" id="panel-media"></div>
-
     <div class="ml-panel active" id="panel-search">
       <div class="ml-card">
         <div class="ml-search-bar">
           <input class="ml-search-input" id="search-input"
-            placeholder="Nombre, hash, ed2k..."
+            placeholder="Nombre, hash, URL..."
             autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search">
           <select class="ml-select" id="search-type">
             <option value="global">Global</option>
@@ -48,30 +45,36 @@
           <button class="ml-btn-sm" id="search-btn">Buscar</button>
         </div>
       </div>
-      <div class="ml-card">
-        <div class="ml-filter-bar">
-          <span class="ml-count" id="results-count">Sin resultados</span>
-          <div class="ml-filter-row">
-            <div class="ml-fq-group">
-              <button class="ml-fq" data-fq="music" title="Musica">🎶</button>
-              <button class="ml-fq" data-fq="video" title="Imagenes y Videos">🎥</button>
-              <button class="ml-fq" data-fq="books" title="Libros y Texto">📚</button>
-              <button class="ml-fq ml-fq--all" data-fq="" title="Todos">🗂️</button>
-            </div>
-            <input class="ml-search-input ml-filter-input" id="filter-input"
-              placeholder="Filtrar: .mp4 .mkv..."
-              autocomplete="off" autocorrect="off" spellcheck="false">
-          </div>
-        </div>
-        <div id="results-wrap"><div class="ml-empty">Introduce un termino de busqueda</div></div>
+      <div class="ml-card" id="stabs-card" style="display:none">
+        <div class="ml-dl-tabs" id="stabs"></div>
       </div>
+      <div id="search-amule-wrap">
+        <div class="ml-card">
+          <div class="ml-filter-bar">
+            <span class="ml-count" id="results-count">Sin resultados</span>
+            <div class="ml-filter-row">
+              <div class="ml-fq-group">
+                <button class="ml-fq" data-fq="music" title="Musica">🎶</button>
+                <button class="ml-fq" data-fq="video" title="Videos">🎥</button>
+                <button class="ml-fq" data-fq="books" title="Libros">📚</button>
+                <button class="ml-fq ml-fq--all" data-fq="" title="Todos">🗂️</button>
+              </div>
+              <input class="ml-search-input ml-filter-input" id="filter-input"
+                placeholder="Filtrar: .mp4 .mkv..."
+                autocomplete="off" autocorrect="off" spellcheck="false">
+            </div>
+          </div>
+          <div id="results-wrap"><div class="ml-empty">Introduce un termino de busqueda</div></div>
+        </div>
+      </div>
+      <div id="search-plugin-wrap" style="display:none"></div>
     </div>
 
     <div class="ml-panel" id="panel-downloads">
       <div class="ml-card">
-        <div class="ml-dl-tabs">
-          <button class="ml-dl-tab active" id="tab-downloading" onclick="switchDlTab('downloading')">⬇️ Descargando</button>
-          <button class="ml-dl-tab" id="tab-completed" onclick="switchDlTab('completed')">✅ Completados</button>
+        <div class="ml-dl-tabs" id="dl-tabs">
+          <button class="ml-dl-tab active" data-dltab="amule" onclick="switchDlTab('downloading')">⬇️ aMule</button>
+          <button class="ml-dl-tab" data-dltab="amule-done" onclick="switchDlTab('completed')">✅ Completados</button>
         </div>
       </div>
       <div id="dl-downloading">
@@ -88,11 +91,12 @@
           <div id="shared-wrap"><div class="ml-empty">Sin archivos</div></div>
         </div>
       </div>
+      <div id="dl-plugin-wrap" style="display:none"></div>
     </div>
 
     <div class="ml-panel" id="panel-config">
       <div class="ml-card">
-        <div class="ml-config-grid">
+        <div class="ml-config-grid" id="cfg-grid">
           <button class="ml-config-item" onclick="toggleAmuleCat(this)"><span class="ci-ico">🫏</span><span class="ci-lbl">aMule</span></button>
           <button class="ml-config-item" onclick="openSub('about.html')"><span class="ci-ico">ℹ️</span><span class="ci-lbl">About</span></button>
         </div>
@@ -113,8 +117,6 @@
       </div>
     </div>
 
-    <div class="ml-panel" id="panel-irc"></div>
-
   </div>
 
   <div id="subpage-wrap">
@@ -124,11 +126,9 @@
     </div>
   </div>
 
-  <nav class="ml-bottomnav">
-    <button class="ml-navbtn" data-panel="media"><span class="nav-ico">🎵</span><span class="nav-lbl">Media</span></button>
+  <nav class="ml-bottomnav" id="bottomnav">
     <button class="ml-navbtn active" data-panel="search"><span class="nav-ico">🔍</span><span class="nav-lbl">Buscar</span></button>
     <button class="ml-navbtn" data-panel="downloads"><span class="nav-ico">⬇️</span><span class="nav-lbl">Descargas</span></button>
-    <button class="ml-navbtn" data-panel="irc"><span class="nav-ico">💬</span><span class="nav-lbl">IRC</span></button>
     <button class="ml-navbtn" data-panel="config"><span class="nav-ico">⚙️</span><span class="nav-lbl">Config</span></button>
   </nav>
 </div>
@@ -143,6 +143,7 @@ let searchResults = [], pollTimer = null, pollCount = 0, isSearching = false;
 let dlTimer = null, connectedSrv = null, srvList = [];
 let curPanel = 'search', curDlTab = 'downloading';
 let knownHashes = new Set(), dlHashes = new Set();
+let searchPlugins = [], dlPlugins = [], curSearchTab = 'amule', curQuery = '';
 
 function toast(msg) {
   const t = $('toast');
@@ -171,7 +172,7 @@ async function api(method, path, body) {
 const _execSrcs = new Set();
 function _execScripts(el) {
   el.querySelectorAll('script').forEach(o => {
-    if (o.dataset.executed) return;
+    if (o.type === 'application/json' || o.dataset.executed) return;
     if (o.src && _execSrcs.has(o.src)) return;
     if (o.src) _execSrcs.add(o.src);
     o.dataset.executed = '1';
@@ -204,9 +205,10 @@ function closeSub() {
   $('subpage-inner').innerHTML = '';
 }
 
-function showApp() {
+async function showApp() {
   $('login').style.display = 'none';
   $('app').style.display = 'block';
+  await initPlugins();
   loadConnState();
 }
 async function connect(pw) { await api('POST', '/api/connect', { password: pw }); }
@@ -221,37 +223,147 @@ async function doLogin() {
 }
 $('login-btn').onclick = doLogin;
 $('pw-input').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-
 (async () => {
   const pw = localStorage.getItem(PK);
   if (!pw) return;
   try { await connect(pw); showApp(); } catch(e) {}
 })();
 
-document.querySelectorAll('.ml-navbtn').forEach(btn => {
-  btn.onclick = () => {
-    pausePolling(); stopDlTimer();
-    document.querySelectorAll('.ml-navbtn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.ml-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    curPanel = btn.dataset.panel;
-    $('panel-'+curPanel).classList.add('active');
-    if (curPanel === 'media' && !$('panel-media').dataset.loaded) {
-      $('panel-media').dataset.loaded = '1';
-      loadPanel('media.html', $('panel-media'));
-    }
-    if (curPanel === 'downloads') {
-      switchDlTab(curDlTab);
-      dlTimer = setInterval(() => { if (curDlTab === 'completed') loadShared(); else loadDownloads(); }, 3000);
-    }
-    if (curPanel === 'config') { loadSrvInfo(); loadConnState(); }
-    if (curPanel === 'irc' && !$('panel-irc').dataset.loaded) {
-      $('panel-irc').dataset.loaded = '1';
-      loadPanel('irc.html', $('panel-irc'));
-    }
-    if (curPanel === 'search' && isSearching && pollCount < POLL_MAX) resumePolling();
-  };
-});
+function switchPanel(id) {
+  pausePolling(); stopDlTimer();
+  document.querySelectorAll('.ml-navbtn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ml-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.querySelector('.ml-navbtn[data-panel="'+id+'"]');
+  if (btn) btn.classList.add('active');
+  const panel = $('panel-'+id);
+  if (!panel) return;
+  panel.classList.add('active');
+  curPanel = id;
+  if (panel.dataset.plugin && !panel.dataset.loaded) {
+    panel.dataset.loaded = '1';
+    loadPanel('plugins/'+panel.dataset.plugin+'.html', panel);
+  }
+  if (id === 'downloads') {
+    switchDlTab(curDlTab);
+    if (curDlTab === 'amule' || curDlTab === 'amule-done')
+      dlTimer = setInterval(() => { if (curDlTab === 'amule-done') loadShared(); else loadDownloads(); }, 3000);
+  }
+  if (id === 'config') { loadSrvInfo(); loadConnState(); }
+  if (id === 'search' && isSearching && pollCount < POLL_MAX) resumePolling();
+}
+
+async function initPlugins() {
+  const plugins = await fetch('/api/plugins').then(r => r.json()).catch(() => []);
+  const nav = $('bottomnav');
+  const main = document.querySelector('.ml-main');
+  const searchBtn = nav.querySelector('[data-panel="search"]');
+  searchPlugins = plugins.filter(m => m.capabilities?.includes('search'));
+  dlPlugins = plugins.filter(m => m.capabilities?.includes('download'));
+  for (const m of plugins) {
+    if (!m.tab || m.capabilities?.includes('search')) continue;
+    const panel = document.createElement('div');
+    panel.className = 'ml-panel';
+    panel.id = 'panel-'+m.id;
+    panel.dataset.plugin = m.id;
+    main.appendChild(panel);
+    const btn = document.createElement('button');
+    btn.className = 'ml-navbtn';
+    btn.dataset.panel = m.id;
+    btn.innerHTML = '<span class="nav-ico">'+m.icon+'</span><span class="nav-lbl">'+m.name+'</span>';
+    nav.insertBefore(btn, searchBtn);
+  }
+  dlPlugins.forEach(m => {
+    const b = document.createElement('button');
+    b.className = 'ml-dl-tab';
+    b.dataset.dltab = m.id;
+    b.textContent = m.icon+' '+m.name;
+    b.onclick = () => { stopDlTimer(); switchDlTab(m.id); };
+    $('dl-tabs').appendChild(b);
+  });
+  plugins.filter(m => m.settings).forEach(m => {
+    const b = document.createElement('button');
+    b.className = 'ml-config-item';
+    b.onclick = () => openSub('plugins/'+m.id+'.html');
+    b.innerHTML = '<span class="ci-ico">'+m.icon+'</span><span class="ci-lbl">'+m.name+'</span>';
+    $('cfg-grid').appendChild(b);
+  });
+  document.querySelectorAll('.ml-navbtn').forEach(b => { b.onclick = () => switchPanel(b.dataset.panel); });
+  buildSearchTabs();
+}
+
+function buildSearchTabs() {
+  const card = $('stabs-card');
+  if (!searchPlugins.length) { card.style.display = 'none'; return; }
+  card.style.display = '';
+  const all = [{id:'amule', label:'🫏 aMule'}, ...searchPlugins.map(p => ({id:p.id, label:p.icon+' '+p.name}))];
+  $('stabs').innerHTML = all.map(t =>
+    '<button class="ml-dl-tab'+(t.id===curSearchTab?' active':'')+'" onclick="switchSearchTab(\''+t.id+'\')">'+t.label+'</button>'
+  ).join('');
+}
+
+function switchSearchTab(id) {
+  curSearchTab = id;
+  buildSearchTabs();
+  const isAmule = id === 'amule';
+  $('search-amule-wrap').style.display = isAmule ? '' : 'none';
+  const pw = $('search-plugin-wrap');
+  pw.style.display = isAmule ? 'none' : '';
+  if (!isAmule) {
+    const pl = searchPlugins.find(p => p.id === id);
+    if (pl) loadPluginSearch(pl, curQuery, pw);
+  }
+}
+
+function loadPluginSearch(pl, query, wrap) {
+  const key = pl.id+'::'+query;
+  if (wrap.dataset.loadedFor === key) return;
+  wrap.dataset.loadedFor = key;
+  wrap.innerHTML = '<div class="ml-empty">⌛ Cargando...</div>';
+  fetch('plugins/'+pl.id+'.html')
+    .then(r => { if (!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+    .then(html => {
+      wrap.innerHTML = html;
+      wrap.dataset.query = query;
+      _execScripts(wrap);
+      wrap.dispatchEvent(new CustomEvent('pluginSearch', { bubbles: false, detail: { query } }));
+    })
+    .catch(e => { wrap.innerHTML = '<div class="ml-empty">Error: '+esc(e.message)+'</div>'; });
+}
+
+async function doSearch() {
+  const q = $('search-input').value.trim(); if (!q) return;
+  curQuery = q;
+  stopPolling();
+  const btn = $('search-btn');
+  btn.disabled = true; btn.textContent = '⌛';
+  $('filter-input').value = '';
+  searchResults = [];
+  const pw = $('search-plugin-wrap');
+  pw.dataset.loadedFor = '';
+  curSearchTab = 'amule';
+  buildSearchTabs();
+  $('search-amule-wrap').style.display = '';
+  pw.style.display = 'none';
+
+  const isURL = /^https?:\/\//.test(q);
+  if (isURL) {
+    $('results-wrap').innerHTML = '<div class="ml-empty">—</div>';
+    $('results-count').textContent = '';
+    if (searchPlugins.length) switchSearchTab(searchPlugins[0].id);
+    btn.disabled = false; btn.textContent = 'Buscar';
+    return;
+  }
+  $('results-wrap').innerHTML = '<div class="ml-empty">⌛ Buscando...</div>';
+  $('results-count').textContent = 'Buscando...';
+  try {
+    await api('POST', '/api/search/start', { query: q, type: $('search-type').value });
+    if (!knownHashes.size && !dlHashes.size) loadHashesInBackground();
+    isSearching = true; resumePolling();
+  } catch(e) { err(e.message); $('results-wrap').innerHTML = '<div class="ml-empty">Error</div>'; }
+  btn.disabled = false; btn.textContent = 'Buscar';
+}
+$('search-btn').onclick = doSearch;
+$('search-input').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
 
 async function loadConnState() {
   try { const d = await api('GET', '/api/connstate'); connectedSrv = d.connectedServer || null; } catch(e) {}
@@ -270,22 +382,6 @@ document.addEventListener('visibilitychange', () => {
   else if (curPanel === 'search' && isSearching && pollCount < POLL_MAX) resumePolling();
 });
 
-async function doSearch() {
-  const q = $('search-input').value.trim(); if (!q) return;
-  stopPolling();
-  const btn = $('search-btn');
-  btn.disabled = true; btn.textContent = '⌛';
-  $('results-wrap').innerHTML = '<div class="ml-empty">⌛ Buscando...</div>';
-  $('results-count').textContent = 'Buscando...';
-  $('filter-input').value = '';
-  searchResults = [];
-  try {
-    await api('POST', '/api/search/start', { query: q, type: $('search-type').value });
-    if (!knownHashes.size && !dlHashes.size) loadHashesInBackground();
-    isSearching = true; resumePolling();
-  } catch(e) { err(e.message); $('results-wrap').innerHTML = '<div class="ml-empty">Error</div>'; }
-  btn.disabled = false; btn.textContent = 'Buscar';
-}
 async function loadHashesInBackground() {
   try {
     const [shared, downloads] = await Promise.all([
@@ -300,8 +396,7 @@ function applyResults(data) {
   const incoming = Array.isArray(data) ? data : [];
   if (!incoming.length && isSearching) return;
   searchResults = incoming.map(r => ({
-    ...r,
-    present: knownHashes.has(r.fileHash),
+    ...r, present: knownHashes.has(r.fileHash),
     currentDl: r.currentDl || dlHashes.has(r.fileHash)
   }));
   renderResults();
@@ -316,25 +411,23 @@ function renderResults() {
     ? list.length+'/'+searchResults.length+' resultados'
     : searchResults.length+' resultado'+(searchResults.length !== 1 ? 's' : '');
   if (!list.length) {
-    $('results-wrap').innerHTML = '<div class="ml-empty">'+(exts.length?'Sin resultados para ese filtro':'Sin resultados aun')+'</div>';
+    $('results-wrap').innerHTML = '<div class="ml-empty">'+(exts.length ? 'Sin resultados para ese filtro' : 'Sin resultados aun')+'</div>';
     return;
   }
   $('results-wrap').innerHTML = list.map(f => {
     const cls = f.present ? ' ml-item-present' : f.currentDl ? ' ml-item-currentdl' : '';
     const btn = f.present
-      ? `<button class="ml-btn-sm" disabled>✅ Disponible</button>`
+      ? '<button class="ml-btn-sm" disabled>✅ Disponible</button>'
       : f.currentDl
-        ? `<button class="ml-btn-sm" disabled>⬇️ Descargando</button>`
-        : `<button class="ml-btn-sm" onclick="downloadFile('${esc(f.fileHash)}',this)">⬇️ Descargar</button>`;
-    return `<div class="ml-item${cls}">
-      <div class="ml-item-name">${esc(f.fileName)}</div>
-      <div class="ml-item-meta">📦${fmtSize(f.fileSize)} &nbsp;🌱${f.sourceCount||'—'}</div>
-      <div class="ml-item-actions">${btn}</div>
-    </div>`;
+        ? '<button class="ml-btn-sm" disabled>⬇️ Descargando</button>'
+        : '<button class="ml-btn-sm" onclick="downloadFile(\''+esc(f.fileHash)+'\',this)">⬇️ Descargar</button>';
+    return '<div class="ml-item'+cls+'">'
+      +'<div class="ml-item-name">'+esc(f.fileName)+'</div>'
+      +'<div class="ml-item-meta">📦'+fmtSize(f.fileSize)+' &nbsp;🌱'+(f.sourceCount||'—')+'</div>'
+      +'<div class="ml-item-actions">'+btn+'</div>'
+      +'</div>';
   }).join('');
 }
-$('search-btn').onclick = doSearch;
-$('search-input').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
 const FQ = {
   music: 'mp3 flac ogg aac wav wma m4a opus aiff ape alac mka mid midi',
   video: 'mp4 mkv avi mov wmv flv webm m4v mpg mpeg ts vob jpg jpeg png gif webp bmp tiff svg heic avif raw cr2 nef',
@@ -342,8 +435,7 @@ const FQ = {
 };
 document.querySelectorAll('.ml-fq').forEach(btn => {
   btn.onclick = () => {
-    const fi = $('filter-input');
-    fi.value = FQ[btn.dataset.fq] || '';
+    $('filter-input').value = FQ[btn.dataset.fq] || '';
     document.querySelectorAll('.ml-fq').forEach(b => b.classList.remove('ml-fq--on'));
     btn.classList.add('ml-fq--on');
     renderResults();
@@ -353,8 +445,6 @@ $('filter-input').oninput = () => {
   document.querySelectorAll('.ml-fq').forEach(b => b.classList.remove('ml-fq--on'));
   renderResults();
 };
-
-
 async function downloadFile(hash, btn) {
   btn.disabled = true; btn.textContent = '⌛';
   try {
@@ -365,7 +455,6 @@ async function downloadFile(hash, btn) {
     if (r) { r.currentDl = true; renderResults(); }
   } catch(e) { btn.disabled = false; btn.textContent = '⬇️ Descargar'; err(e.message); }
 }
-
 async function loadDownloads() {
   const wrap = $('downloads-wrap');
   try {
@@ -375,16 +464,15 @@ async function loadDownloads() {
     if (!data.length) { wrap.innerHTML = '<div class="ml-empty">Sin descargas activas</div>'; return; }
     wrap.innerHTML = data.map(f => {
       const pct = parseFloat(f.progress || 0);
-      return `<div class="ml-item">
-        <div class="ml-item-name">${esc(f.fileName)}</div>
-        <div class="ml-progress-wrap"><div class="ml-progress-bar" style="width:${Math.min(pct,100)}%"></div></div>
-        <div class="ml-item-meta">📦${fmtSize(f.fileSizeDownloaded)}/${fmtSize(f.fileSize)} &nbsp;🌱${f.sourceCount||'—'}${f.speed?' &nbsp;⚡'+fmtSize(f.speed)+'/s':''} &nbsp;${pct}%</div>
-        <div class="ml-item-actions">
-          <button class="ml-btn-sm" onclick="dlAction('pause','${esc(f.fileHash)}',this)">⏸️ Pausar</button>
-          <button class="ml-btn-sm" onclick="dlAction('resume','${esc(f.fileHash)}',this)">▶️ Reanudar</button>
-          <button class="ml-btn-sm ml-btn-danger" onclick="dlAction('cancel','${esc(f.fileHash)}',this)">🗑️ Borrar</button>
-        </div>
-      </div>`;
+      return '<div class="ml-item">'
+        +'<div class="ml-item-name">'+esc(f.fileName)+'</div>'
+        +'<div class="ml-progress-wrap"><div class="ml-progress-bar" style="width:'+Math.min(pct,100)+'%"></div></div>'
+        +'<div class="ml-item-meta">📦'+fmtSize(f.fileSizeDownloaded)+'/'+fmtSize(f.fileSize)+' &nbsp;🌱'+(f.sourceCount||'—')+(f.speed?' &nbsp;⚡'+fmtSize(f.speed)+'/s':'')+' &nbsp;'+pct+'%</div>'
+        +'<div class="ml-item-actions">'
+        +'<button class="ml-btn-sm" onclick="dlAction(\'pause\',\''+esc(f.fileHash)+'\',this)">⏸️</button>'
+        +'<button class="ml-btn-sm" onclick="dlAction(\'resume\',\''+esc(f.fileHash)+'\',this)">▶️</button>'
+        +'<button class="ml-btn-sm ml-btn-danger" onclick="dlAction(\'cancel\',\''+esc(f.fileHash)+'\',this)">🗑️</button>'
+        +'</div></div>';
     }).join('');
   } catch(e) { if (!wrap.querySelector('.ml-item')) wrap.innerHTML = '<div class="ml-empty">Error cargando</div>'; }
 }
@@ -396,56 +484,55 @@ async function dlAction(action, hash, btn) {
     toast('OK'); loadDownloads();
   } catch(e) { btn.disabled = false; err(e.message); }
 }
-
 function switchDlTab(tab) {
   curDlTab = tab;
-  $('tab-downloading').classList.toggle('active', tab === 'downloading');
-  $('tab-completed').classList.toggle('active', tab === 'completed');
-  $('dl-downloading').style.display = tab === 'downloading' ? '' : 'none';
-  $('dl-completed').style.display = tab === 'completed' ? '' : 'none';
-  if (tab === 'downloading') loadDownloads();
-  if (tab === 'completed') loadShared();
+  document.querySelectorAll('#dl-tabs .ml-dl-tab').forEach(b => b.classList.toggle('active', b.dataset.dltab === tab));
+  const isAmule = tab === 'amule' || tab === 'amule-done';
+  $('dl-downloading').style.display = tab === 'amule' ? '' : 'none';
+  $('dl-completed').style.display = tab === 'amule-done' ? '' : 'none';
+  const pw = $('dl-plugin-wrap');
+  pw.style.display = isAmule ? 'none' : '';
+  if (tab === 'amule') loadDownloads();
+  if (tab === 'amule-done') loadShared();
+  if (!isAmule) {
+    const pl = dlPlugins.find(p => p.id === tab);
+    if (pl) loadDlPlugin(pl, pw);
+  }
 }
 
+function loadDlPlugin(pl, wrap) {
+  if (wrap.dataset.loadedPlugin === pl.id) return;
+  wrap.dataset.loadedPlugin = pl.id;
+  loadPanel('plugins/'+pl.id+'.html', wrap);
+}
 async function loadShared() {
   const wrap = $('shared-wrap');
-  const hadContent = wrap.querySelector('.ml-item');
-  if (!hadContent) wrap.innerHTML = '<div class="ml-empty">⌛ Cargando...</div>';
+  if (!wrap.querySelector('.ml-item')) wrap.innerHTML = '<div class="ml-empty">⌛ Cargando...</div>';
   try {
     const data = await api('GET', '/api/shared');
     knownHashes = new Set(data.map(f => f.fileHash).filter(Boolean));
     wrap.innerHTML = data.length
-      ? data.map(f => `<div class="ml-item">
-          <div class="ml-item-name">${esc(f.fileName)}</div>
-          <div class="ml-item-meta">📦${fmtSize(f.fileSize)} &nbsp;📤${fmtSize(f.transferred)} &nbsp;🤲${f.reqCount||'0'}</div>
-        </div>`).join('')
+      ? data.map(f => '<div class="ml-item"><div class="ml-item-name">'+esc(f.fileName)+'</div><div class="ml-item-meta">📦'+fmtSize(f.fileSize)+' &nbsp;📤'+fmtSize(f.transferred)+' &nbsp;🤲'+(f.reqCount||'0')+'</div></div>').join('')
       : '<div class="ml-empty">Sin archivos</div>';
-  } catch(e) { if (!hadContent) wrap.innerHTML = '<div class="ml-empty">Error</div>'; }
+  } catch(e) { if (!wrap.querySelector('.ml-item')) wrap.innerHTML = '<div class="ml-empty">Error</div>'; }
 }
 async function loadUploading() {
   $('subpage-inner').innerHTML = '<div class="ml-empty">⌛ Cargando...</div>';
   try {
     const entries = await api('GET', '/api/uploads');
     $('subpage-inner').innerHTML = '<div class="ml-card">'
-      + (Array.isArray(entries) && entries.length
-        ? entries.map(f => `<div class="ml-item">
-            <div class="ml-item-name">${esc(f.fileName||'—')}</div>
-            <div class="ml-item-meta">📦${fmtSize(f.fileSize)} &nbsp;⚡${fmtSize(f.speed)}/s</div>
-          </div>`).join('')
+      +(Array.isArray(entries) && entries.length
+        ? entries.map(f => '<div class="ml-item"><div class="ml-item-name">'+esc(f.fileName||'—')+'</div><div class="ml-item-meta">📦'+fmtSize(f.fileSize)+' &nbsp;⚡'+fmtSize(f.speed)+'/s</div></div>').join('')
         : '<div class="ml-empty">Sin archivos subiendo</div>')
-      + '</div>';
+      +'</div>';
   } catch(e) { $('subpage-inner').innerHTML = '<div class="ml-empty">Error</div>'; err(e.message); }
 }
-
 async function loadSrvInfo() {
   try {
     const d = await api('GET', '/api/servers/info');
-    $('srv-info-wrap').innerHTML = d.message
-      ? '<div class="ml-log-block">'+esc(d.message)+'</div>'
-      : '<div class="ml-empty">Sin mensaje</div>';
+    $('srv-info-wrap').innerHTML = d.message ? '<div class="ml-log-block">'+esc(d.message)+'</div>' : '<div class="ml-empty">Sin mensaje</div>';
   } catch(e) { $('srv-info-wrap').innerHTML = '<div class="ml-empty">—</div>'; }
 }
-
 function isConn(s) { return !!(connectedSrv && s.ip === connectedSrv.ip && s.port === connectedSrv.port); }
 async function loadServers() {
   await loadConnState();
@@ -455,17 +542,15 @@ async function loadServers() {
     const sorted = [...srvList].sort((a,b) => isConn(a) ? -1 : isConn(b) ? 1 : 0);
     $('subpage-inner').innerHTML = '<div class="ml-card">'+sorted.map(s => {
       const conn = isConn(s), i = srvList.indexOf(s);
-      return `<div class="ml-item${conn?' ml-item-connected':''}">
-        <div class="ml-item-name">${conn?'🟢 ':''}${esc(s.name)}</div>
-        <div class="ml-item-meta">👥${s.users||'—'} &nbsp;🗃️${s.files||'—'} &nbsp;⚡${s.ping?s.ping+'ms':'—'}${s.version?' &nbsp;v'+esc(s.version):''}</div>
-        ${s.desc?'<div class="ml-item-meta">'+esc(s.desc)+'</div>':''}
-        <div class="ml-item-actions">
-          ${conn
-            ? '<button class="ml-btn-sm ml-btn-danger" onclick="srvDisconnect(this)">⛔ Desconectar</button>'
-            : '<button class="ml-btn-sm" onclick="srvConnect('+i+',this)">🔗 Conectar</button>'}
-          <button class="ml-btn-sm ml-btn-danger" onclick="srvRemove(${i},this)">🗑️ Borrar</button>
-        </div>
-      </div>`;
+      return '<div class="ml-item'+(conn?' ml-item-connected':'')+'"><div class="ml-item-name">'+(conn?'🟢 ':'')+esc(s.name)+'</div>'
+        +'<div class="ml-item-meta">👥'+(s.users||'—')+' &nbsp;🗃️'+(s.files||'—')+' &nbsp;⚡'+(s.ping?s.ping+'ms':'—')+(s.version?' &nbsp;v'+esc(s.version):'')+'</div>'
+        +(s.desc?'<div class="ml-item-meta">'+esc(s.desc)+'</div>':'')
+        +'<div class="ml-item-actions">'
+        +(conn
+          ? '<button class="ml-btn-sm ml-btn-danger" onclick="srvDisconnect(this)">⛔ Desconectar</button>'
+          : '<button class="ml-btn-sm" onclick="srvConnect('+i+',this)">🔗 Conectar</button>')
+        +' <button class="ml-btn-sm ml-btn-danger" onclick="srvRemove('+i+',this)">🗑️</button>'
+        +'</div></div>';
     }).join('')+'</div>';
   } catch(e) { $('subpage-inner').innerHTML = '<div class="ml-empty">Error</div>'; err(e.message); }
 }
@@ -484,18 +569,13 @@ async function srvRemove(i, btn) {
   try { await api('DELETE', '/api/servers', { ip: s.ip, port: s.port }); toast('Borrado'); loadServers(); }
   catch(e) { btn.disabled = false; err(e.message); }
 }
-
 async function loadCats() {
   try {
     const data = await api('GET', '/api/categories');
     $('subpage-inner').innerHTML = '<div class="ml-card">'
       +'<div style="margin-bottom:12px"><button class="ml-btn-sm" onclick="newCat()">+ Nueva</button></div>'
       +(data.length
-        ? data.map(c => `<div class="ml-item">
-            <div class="ml-item-name">${esc(c.title)}</div>
-            ${c.path?'<div class="ml-item-meta">'+esc(c.path)+'</div>':''}
-            <div class="ml-item-actions"><button class="ml-btn-sm ml-btn-danger" onclick="deleteCat(${c.id},this)">🗑️ Borrar</button></div>
-          </div>`).join('')
+        ? data.map(c => '<div class="ml-item"><div class="ml-item-name">'+esc(c.title)+'</div>'+(c.path?'<div class="ml-item-meta">'+esc(c.path)+'</div>':'')+'<div class="ml-item-actions"><button class="ml-btn-sm ml-btn-danger" onclick="deleteCat('+c.id+',this)">🗑️ Borrar</button></div></div>').join('')
         : '<div class="ml-empty">Sin categorias</div>')
       +'</div>';
   } catch(e) { $('subpage-inner').innerHTML = '<div class="ml-empty">Error</div>'; err(e.message); }
@@ -509,16 +589,12 @@ async function deleteCat(id, btn) {
   if (!confirm('Eliminar?')) return; btn.disabled = true;
   try { await api('DELETE', '/api/categories/'+id); toast('Eliminada'); loadCats(); } catch(e) { btn.disabled = false; err(e.message); }
 }
-
 function renderKV(obj) {
   if (!obj || typeof obj !== 'object') return '';
   return Object.entries(obj).map(([k,v]) => {
     const lbl = k.replace(/^EC_TAG_/,'').replace(/_/g,' ').toLowerCase();
-    if (typeof v === 'string' && v.length > 80) {
-      return '<div class="ml-stat-row"><span class="ml-stat-key">'+esc(lbl)+'</span><span class="ml-stat-val">'
-        +'<span class="ml-log-collapse" onclick="var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'">mostrar ▾</span>'
-        +'<div class="ml-log-block" style="display:none">'+esc(v)+'</div></span></div>';
-    }
+    if (typeof v === 'string' && v.length > 80)
+      return '<div class="ml-stat-row"><span class="ml-stat-key">'+esc(lbl)+'</span><span class="ml-stat-val"><span class="ml-log-collapse" onclick="var d=this.nextElementSibling;d.style.display=d.style.display===\'none\'?\'block\':\'none\'">mostrar ▾</span><div class="ml-log-block" style="display:none">'+esc(v)+'</div></span></div>';
     if (v && typeof v === 'object' && !Array.isArray(v)) {
       const ch = renderKV(v); if (!ch) return '';
       return '<div class="ml-stat-group"><span class="ml-stat-key">'+esc(lbl)+'</span><div class="ml-stat-children">'+ch+'</div></div>';
@@ -532,7 +608,6 @@ async function loadStats() {
     $('subpage-inner').innerHTML = '<div class="ml-card"><div class="ml-stat-block">'+renderKV(data)+'</div></div>';
   } catch(e) { $('subpage-inner').innerHTML = '<div class="ml-empty">Error</div>'; err(e.message); }
 }
-
 function injectGFont(url) {
   const ex = document.getElementById('theme-gfont'); if (ex) ex.remove();
   const lk = document.createElement('link');
@@ -544,7 +619,7 @@ function injectGFont(url) {
 function injectDirectFont(url) {
   const st = document.getElementById('theme-font') || document.createElement('style');
   st.id = 'theme-font';
-  st.textContent = `@font-face{font-family:'UserFont';src:url('${url}')}`;
+  st.textContent = "@font-face{font-family:'UserFont';src:url('"+url+"')}";
   document.head.appendChild(st);
   return 'UserFont';
 }
@@ -556,35 +631,30 @@ function applyTheme(t) {
     if (family) {
       const st = document.getElementById('theme-body-font') || document.createElement('style');
       st.id = 'theme-body-font';
-      st.textContent = `body{font-family:'${family}','Fluent Emoji Color',sans-serif}`;
+      st.textContent = "body{font-family:'"+family+"','Fluent Emoji Color',sans-serif}";
       document.head.appendChild(st);
     }
   }
 }
 applyTheme(JSON.parse(localStorage.getItem(TK)||'null'));
-
 function loadTheme() {
   const t = JSON.parse(localStorage.getItem(TK)||'{}');
-  $('subpage-inner').innerHTML = `<div class="ml-card">
-    <div class="ml-item">
-      <div class="ml-item-name">Imagen de fondo (URL)</div>
-      <input class="ml-search-input" id="th-bg" style="width:100%;margin-top:6px" placeholder="https://..." value="${esc(t.bg||'')}">
-    </div>
-    <div class="ml-item">
-      <div class="ml-item-name">Fuente (Google Fonts o jsDelivr)</div>
-      <div class="ml-item-meta" style="margin-top:4px">fonts.googleapis.com/css2?family=Comfortaa &nbsp;·&nbsp; cdn.jsdelivr.net/gh/...</div>
-      <input class="ml-search-input" id="th-font" style="width:100%;margin-top:6px" placeholder="https://fonts.googleapis.com/css2?family=..." value="${esc(t.font||'')}">
-    </div>
-    <div class="ml-item-actions" style="margin-top:14px;gap:8px">
-      <button class="ml-btn-sm" onclick="saveTheme()">💾 Guardar</button>
-      <button class="ml-btn-sm ml-btn-danger" onclick="resetTheme()">🗑️ Restablecer</button>
-    </div>
-  </div>`;
+  $('subpage-inner').innerHTML = '<div class="ml-card">'
+    +'<div class="ml-item"><div class="ml-item-name">Imagen de fondo (URL)</div>'
+    +'<input class="ml-search-input" id="th-bg" style="width:100%;margin-top:6px" placeholder="https://..." value="'+esc(t.bg||'')+'"></div>'
+    +'<div class="ml-item"><div class="ml-item-name">Fuente (Google Fonts o jsDelivr)</div>'
+    +'<input class="ml-search-input" id="th-font" style="width:100%;margin-top:6px" placeholder="https://fonts.googleapis.com/css2?family=..." value="'+esc(t.font||'')+'"></div>'
+    +'<div class="ml-item-actions" style="margin-top:14px;gap:8px">'
+    +'<button class="ml-btn-sm" onclick="saveTheme()">💾 Guardar</button>'
+    +'<button class="ml-btn-sm ml-btn-danger" onclick="resetTheme()">🗑️ Restablecer</button>'
+    +'</div></div>';
 }
 function saveTheme() {
   const t = { bg: $('th-bg').value.trim(), font: $('th-font').value.trim() };
-  localStorage.setItem(TK, JSON.stringify(t));
-  applyTheme(t); toast('Tema guardado');
+  localStorage.setItem(TK, JSON.stringify(t)); applyTheme(t); toast('Tema guardado');
+}
+function resetTheme() {
+  localStorage.removeItem(TK); document.body.style.backgroundImage = ''; toast('Tema restablecido');
 }
 async function clearCompleted() {
   const btn = $('btn-clear-completed'); btn.disabled = true;
@@ -592,63 +662,31 @@ async function clearCompleted() {
   catch(e) { err(e.message); }
   btn.disabled = false;
 }
-
 async function loadAmulePrefs() {
   $('subpage-inner').innerHTML = '<div class="ml-empty">⌛ Cargando...</div>';
   try {
     const p = await api('GET', '/api/preferences');
-    $('subpage-inner').innerHTML = `<div class="ml-card">
-      <div class="ml-item">
-        <div class="ml-item-name">Nick</div>
-        <input class="ml-search-input" id="ap-nick" style="width:100%;margin-top:6px" value="${esc(p.nick||'')}" disabled>
-      </div>
-      <div class="ml-item">
-        <div class="ml-item-name">Max Download (KB/s · 0 = sin limite)</div>
-        <input class="ml-search-input" id="ap-dl" type="number" min="0" style="width:100%;margin-top:6px" value="${p.maxDownload??0}">
-      </div>
-      <div class="ml-item">
-        <div class="ml-item-name">Max Upload (KB/s · 0 = sin limite)</div>
-        <input class="ml-search-input" id="ap-ul" type="number" min="0" style="width:100%;margin-top:6px" value="${p.maxUpload??0}">
-      </div>
-      <div class="ml-item">
-        <div class="ml-item-name">Puerto TCP</div>
-        <input class="ml-search-input" id="ap-tcp" type="number" style="width:100%;margin-top:6px" value="${p.tcpPort??''}" disabled>
-      </div>
-      <div class="ml-item">
-        <div class="ml-item-name">Puerto UDP</div>
-        <input class="ml-search-input" id="ap-udp" type="number" style="width:100%;margin-top:6px" value="${p.udpPort??''}" disabled>
-      </div>
-      <div class="ml-item">
-        <div class="ml-item-name">Directorio Entrada</div>
-        <input class="ml-search-input" id="ap-inc" style="width:100%;margin-top:6px" value="${esc(p.incomingDir||'')}" disabled>
-      </div>
-      <div class="ml-item">
-        <div class="ml-item-name">Directorio Temp</div>
-        <input class="ml-search-input" id="ap-tmp" style="width:100%;margin-top:6px" value="${esc(p.tempDir||'')}" disabled>
-      </div>
-      <div class="ml-item">
-        <div class="ml-item-name">Redes</div>
-        <div class="ml-item-meta" style="margin-top:6px">eD2K: ${p.ed2kEnabled?'✅':'❌'} &nbsp; Kademlia: ${p.kadEnabled?'✅':'❌'}</div>
-      </div>
-      <div class="ml-item-actions" style="margin-top:14px">
-        <button class="ml-btn-sm" onclick="saveAmulePrefs()">💾 Guardar</button>
-      </div>
-    </div>`;
+    $('subpage-inner').innerHTML = '<div class="ml-card">'
+      +'<div class="ml-item"><div class="ml-item-name">Nick</div><input class="ml-search-input" style="width:100%;margin-top:6px" value="'+esc(p.nick||'')+'" disabled></div>'
+      +'<div class="ml-item"><div class="ml-item-name">Max Download (KB/s · 0 = sin limite)</div><input class="ml-search-input" id="ap-dl" type="number" min="0" style="width:100%;margin-top:6px" value="'+(p.maxDownload??0)+'"></div>'
+      +'<div class="ml-item"><div class="ml-item-name">Max Upload (KB/s · 0 = sin limite)</div><input class="ml-search-input" id="ap-ul" type="number" min="0" style="width:100%;margin-top:6px" value="'+(p.maxUpload??0)+'"></div>'
+      +'<div class="ml-item"><div class="ml-item-name">Puerto TCP</div><input class="ml-search-input" style="width:100%;margin-top:6px" value="'+(p.tcpPort||'')+'" disabled></div>'
+      +'<div class="ml-item"><div class="ml-item-name">Puerto UDP</div><input class="ml-search-input" style="width:100%;margin-top:6px" value="'+(p.udpPort||'')+'" disabled></div>'
+      +'<div class="ml-item"><div class="ml-item-name">Directorio Entrada</div><input class="ml-search-input" style="width:100%;margin-top:6px" value="'+esc(p.incomingDir||'')+'" disabled></div>'
+      +'<div class="ml-item"><div class="ml-item-name">Directorio Temp</div><input class="ml-search-input" style="width:100%;margin-top:6px" value="'+esc(p.tempDir||'')+'" disabled></div>'
+      +'<div class="ml-item"><div class="ml-item-name">Redes</div><div class="ml-item-meta" style="margin-top:6px">eD2K: '+(p.ed2kEnabled?'✅':'❌')+' &nbsp; Kademlia: '+(p.kadEnabled?'✅':'❌')+'</div></div>'
+      +'<div class="ml-item-actions" style="margin-top:14px"><button class="ml-btn-sm" onclick="saveAmulePrefs()">💾 Guardar</button></div>'
+      +'</div>';
   } catch(e) { $('subpage-inner').innerHTML = '<div class="ml-empty">Error</div>'; err(e.message); }
 }
-
 function toggleAmuleCat(btn) {
   const c = $('amule-cat');
   const open = c.classList.toggle('open');
   btn.classList.toggle('ml-config-item--active', open);
 }
 async function saveAmulePrefs() {
-  const body = {
-    maxDownload: parseInt($('ap-dl').value) || 0,
-    maxUpload: parseInt($('ap-ul').value) || 0
-  };
-  try { await api('POST', '/api/preferences', body); toast('Guardado'); }
-  catch(e) { err(e.message); }
+  const body = { maxDownload: parseInt($('ap-dl').value)||0, maxUpload: parseInt($('ap-ul').value)||0 };
+  try { await api('POST', '/api/preferences', body); toast('Guardado'); } catch(e) { err(e.message); }
 }
 </script>
 </body>

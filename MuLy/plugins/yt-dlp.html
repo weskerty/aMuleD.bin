@@ -1,0 +1,165 @@
+<script type="application/json" id="manifest">
+{"id":"yt-dlp","name":"YT-DLP","icon":"📥","tab":false,"settings":true,"capabilities":["search","download"]}
+</script>
+
+<style>
+.yt-root{display:flex;flex-direction:column;gap:8px}
+.yt-engine-label{font-size:.65rem;opacity:.4;padding:4px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.yt-job{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:5px}
+.yt-job-title{font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yt-job-meta{font-size:.65rem;opacity:.45;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.yt-prog{height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:2px}
+.yt-prog-bar{height:100%;background:rgba(100,200,100,0.7);border-radius:2px;transition:width .4s}
+.yt-job.error .yt-prog-bar{background:rgba(255,100,100,0.7)}
+.yt-job.done .yt-prog-bar{background:rgba(100,200,100,0.9)}
+</style>
+
+<div class="yt-root" id="yt-root">
+  <div class="ml-card">
+    <div style="font-size:.75rem;opacity:.5;margin-bottom:8px">Descargas activas</div>
+    <div id="yt-jobs"><div class="ml-empty">Sin descargas</div></div>
+  </div>
+  <div id="yt-results"></div>
+</div>
+
+<script>
+(function(){
+  let _jobTimer = null;
+
+  function ytFmt(s) {
+    if (!s) return '';
+    return Math.floor(s/60)+'m'+String(Math.floor(s%60)).padStart(2,'0')+'s';
+  }
+  function ytEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  async function ytDl(url, type, title, btn) {
+    btn.disabled = true;
+    try {
+      await fetch('/api/yt-dlp/download', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({url, type, title})
+      });
+      startJobPoll();
+    } catch(e) {
+      btn.disabled = false;
+      alert('Error: '+e.message);
+    }
+  }
+
+  async function pollJobs() {
+    try {
+      const jobs = await fetch('/api/yt-dlp/jobs').then(r=>r.json());
+      const wrap = document.getElementById('yt-jobs');
+      if (!wrap) { stopJobPoll(); return; }
+      if (!jobs.length) {
+        wrap.innerHTML = '<div class="ml-empty">Sin descargas</div>';
+        stopJobPoll(); return;
+      }
+      wrap.innerHTML = jobs.map(j =>
+        '<div class="yt-job '+j.status+'">'
+        +'<div class="yt-job-title">'+ytEsc(j.title)+'</div>'
+        +'<div class="yt-prog"><div class="yt-prog-bar" style="width:'+(j.percent||0)+'%"></div></div>'
+        +'<div class="yt-job-meta">'
+        +'<span>'+(j.status==='done'?'✅ Listo':j.status==='error'?'❌ '+ytEsc(j.error||''):(j.percent||0)+'% '+(j.speed||''))+'</span>'
+        +'<span style="margin-left:auto">'+(j.type==='video'?'🎬':'🎵')+'</span>'
+        +(j.status==='downloading'||j.status==='queued'
+          ? '<button class="ml-btn-sm ml-btn-danger" onclick="ytCancel(\''+j.jobId+'\')">✕</button>'
+          : '')
+        +'</div></div>'
+      ).join('');
+    } catch(_) {}
+  }
+
+  function startJobPoll() {
+    if (_jobTimer) return;
+    _jobTimer = setInterval(pollJobs, 2000);
+    pollJobs();
+  }
+  function stopJobPoll() {
+    clearInterval(_jobTimer); _jobTimer = null;
+  }
+
+  window.ytCancel = async function(id) {
+    await fetch('/api/yt-dlp/jobs/'+id, {method:'DELETE'});
+    pollJobs();
+  };
+
+  function renderResults(groups) {
+    const wrap = document.getElementById('yt-results');
+    if (!wrap) return;
+    if (!groups || !groups.length) {
+      wrap.innerHTML = '<div class="ml-card"><div class="ml-empty">Sin resultados</div></div>';
+      return;
+    }
+    wrap.innerHTML = groups.map(g =>
+      '<div class="ml-card">'
+      +'<div class="yt-engine-label">'+ytEsc(g.engine)+'</div>'
+      +g.results.map(r =>
+        '<div class="ml-item">'
+        +'<div class="ml-item-name">'+ytEsc(r.title)+'</div>'
+        +'<div class="ml-item-meta">'+(r.channel?ytEsc(r.channel)+' &nbsp;':'')+(r.duration?ytFmt(r.duration):'')+'</div>'
+        +'<div class="ml-item-actions">'
+        +'<button class="ml-btn-sm" onclick="(function(b){ytDl(\''+ytEsc(r.url)+'\',\'audio\',\''+ytEsc(r.title)+'\',b)})(this)">🎵 Audio</button>'
+        +'<button class="ml-btn-sm" onclick="(function(b){ytDl(\''+ytEsc(r.url)+'\',\'video\',\''+ytEsc(r.title)+'\',b)})(this)">🎬 Video</button>'
+        +'</div></div>'
+      ).join('')
+      +'</div>'
+    ).join('');
+  }
+
+  function renderURL(url) {
+    const wrap = document.getElementById('yt-results');
+    if (!wrap) return;
+    wrap.innerHTML = '<div class="ml-card"><div class="ml-item">'
+      +'<div class="ml-item-name" style="font-size:.75rem;word-break:break-all">'+ytEsc(url)+'</div>'
+      +'<div class="ml-item-actions">'
+      +'<button class="ml-btn-sm" onclick="(function(b){ytDl(\''+ytEsc(url)+'\',\'audio\',\'\',b)})(this)">🎵 Audio</button>'
+      +'<button class="ml-btn-sm" onclick="(function(b){ytDl(\''+ytEsc(url)+'\',\'video\',\'\',b)})(this)">🎬 Video</button>'
+      +'</div></div></div>';
+  }
+
+  async function doSearch(query) {
+    if (!query) return;
+    const wrap = document.getElementById('yt-results');
+    if (!wrap) return;
+    const isURL = /^https?:\/\//.test(query);
+    if (isURL) { renderURL(query); return; }
+    wrap.innerHTML = '<div class="ml-card"><div class="ml-empty">⌛ Buscando...</div></div>';
+    try {
+      const d = await fetch('/api/yt-dlp/search', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({query})
+      }).then(r => r.json());
+      renderResults(d.groups || []);
+    } catch(e) {
+      wrap.innerHTML = '<div class="ml-card"><div class="ml-empty">Error: '+ytEsc(e.message)+'</div></div>';
+    }
+  }
+
+  const root = document.getElementById('yt-root');
+  const container = root?.closest('[data-query]') || root?.parentElement;
+
+  function init() {
+    const query = container?.dataset?.query || '';
+    doSearch(query);
+    pollJobs();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  const target = root?.parentElement;
+  if (target) {
+    target.addEventListener('pluginSearch', e => {
+      doSearch(e.detail?.query || '');
+    });
+  }
+
+  window.ytDl = ytDl;
+})();
+</script>

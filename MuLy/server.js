@@ -145,6 +145,22 @@ app.get('/api/irc/state', (req, res) => {
 });
 
 // ── AMULE ──
+
+const PLUGINS_DIR = p.join(__dirname, 'plugins');
+app.get('/api/plugins', (req, res) => {
+  if (!fs.existsSync(PLUGINS_DIR)) return res.json([]);
+  const manifests = fs.readdirSync(PLUGINS_DIR)
+    .filter(f => f.endsWith('.html'))
+    .flatMap(f => {
+      const html = fs.readFileSync(p.join(PLUGINS_DIR, f), 'utf8');
+      const m = html.match(/<script[^>]+id="manifest"[^>]*>([\s\S]*?)<\/script>/);
+      if (!m) return [];
+      try { return [JSON.parse(m[1])]; } catch(_) { return []; }
+    });
+  res.json(manifests);
+});
+app.use('/plugins', express.static(PLUGINS_DIR));
+
 app.get('/', (req, res) => res.sendFile(p.join(__dirname, 'index.html')));
 
 app.post('/api/connect', safe(async (req, res) => {
@@ -473,5 +489,13 @@ app.get('/files{/*path}', (req, res) => {
   if (!fs.existsSync(abs)) return res.status(404).send('Not found');
   res.sendFile(abs);
 });
+
+
+const PS_DIR = PLUGINS_DIR;
+if (fs.existsSync(PS_DIR)) {
+  fs.readdirSync(PS_DIR).filter(f => f.endsWith('.js')).forEach(f => {
+    try { require(p.join(PS_DIR, f))(app, MB); } catch(e) { log('Plugin '+f+' error', e); }
+  });
+}
 
 server.listen(6859, () => log('MuLy → http://localhost:6859'));
