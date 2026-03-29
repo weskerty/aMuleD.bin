@@ -73,8 +73,8 @@
     <div class="ml-panel" id="panel-downloads">
       <div class="ml-card">
         <div class="ml-dl-tabs" id="dl-tabs">
-          <button class="ml-dl-tab active" data-dltab="amule" onclick="switchDlTab('downloading')">⬇️ aMule</button>
-          <button class="ml-dl-tab" data-dltab="amule-done" onclick="switchDlTab('completed')">✅ Completados</button>
+          <button class="ml-dl-tab active" data-dltab="downloading" onclick="switchDlTab('downloading')">⬇️ Descargando</button>
+          <button class="ml-dl-tab" data-dltab="completed" onclick="switchDlTab('completed')">✅ Completados</button>
         </div>
       </div>
       <div id="dl-downloading">
@@ -91,7 +91,6 @@
           <div id="shared-wrap"><div class="ml-empty">Sin archivos</div></div>
         </div>
       </div>
-      <div id="dl-plugin-wrap" style="display:none"></div>
     </div>
 
     <div class="ml-panel" id="panel-config">
@@ -245,8 +244,7 @@ function switchPanel(id) {
   }
   if (id === 'downloads') {
     switchDlTab(curDlTab);
-    if (curDlTab === 'amule' || curDlTab === 'amule-done')
-      dlTimer = setInterval(() => { if (curDlTab === 'amule-done') loadShared(); else loadDownloads(); }, 3000);
+    dlTimer = setInterval(() => { if (curDlTab === 'completed') loadShared(); else loadDownloads(); }, 3000);
   }
   if (id === 'config') { loadSrvInfo(); loadConnState(); }
   if (id === 'search' && isSearching && pollCount < POLL_MAX) resumePolling();
@@ -272,14 +270,6 @@ async function initPlugins() {
     btn.innerHTML = '<span class="nav-ico">'+m.icon+'</span><span class="nav-lbl">'+m.name+'</span>';
     nav.insertBefore(btn, searchBtn);
   }
-  dlPlugins.forEach(m => {
-    const b = document.createElement('button');
-    b.className = 'ml-dl-tab';
-    b.dataset.dltab = m.id;
-    b.textContent = m.icon+' '+m.name;
-    b.onclick = () => { stopDlTimer(); switchDlTab(m.id); };
-    $('dl-tabs').appendChild(b);
-  });
   plugins.filter(m => m.settings).forEach(m => {
     const b = document.createElement('button');
     b.className = 'ml-config-item';
@@ -330,6 +320,24 @@ function loadPluginSearch(pl, query, wrap) {
     .catch(e => { wrap.innerHTML = '<div class="ml-empty">Error: '+esc(e.message)+'</div>'; });
 }
 
+document.getElementById('search-plugin-wrap').addEventListener('pluginSearchDone', e => {
+  const id = e.detail?.id;
+  if (!id) return;
+  const b = document.querySelector('#stabs .ml-dl-tab[onclick*="\''+id+'\'"]');
+  if (!b) return;
+  b.dataset.searchPending = '';
+  b.style.opacity = '';
+  flashTab(id);
+});
+
+function flashTab(id) {
+  const btn = document.querySelector('#stabs .ml-dl-tab[onclick*="\''+id+'\'"]');
+  if (!btn) return;
+  btn.style.transition = 'background .15s';
+  btn.style.background = 'rgba(80,220,120,0.35)';
+  setTimeout(() => { btn.style.background = ''; }, 600);
+}
+
 async function doSearch() {
   const q = $('search-input').value.trim(); if (!q) return;
   curQuery = q;
@@ -340,26 +348,51 @@ async function doSearch() {
   searchResults = [];
   const pw = $('search-plugin-wrap');
   pw.dataset.loadedFor = '';
-  curSearchTab = 'amule';
+
   buildSearchTabs();
-  $('search-amule-wrap').style.display = '';
-  pw.style.display = 'none';
 
   const isURL = /^https?:\/\//.test(q);
   if (isURL) {
     $('results-wrap').innerHTML = '<div class="ml-empty">—</div>';
     $('results-count').textContent = '';
-    if (searchPlugins.length) switchSearchTab(searchPlugins[0].id);
+    if (curSearchTab !== 'amule') {
+      const pl = searchPlugins.find(p => p.id === curSearchTab);
+      if (pl) loadPluginSearch(pl, q, pw);
+    } else if (searchPlugins.length) {
+      switchSearchTab(searchPlugins[0].id);
+    }
     btn.disabled = false; btn.textContent = 'Buscar';
     return;
   }
-  $('results-wrap').innerHTML = '<div class="ml-empty">⌛ Buscando...</div>';
-  $('results-count').textContent = 'Buscando...';
-  try {
-    await api('POST', '/api/search/start', { query: q, type: $('search-type').value });
-    if (!knownHashes.size && !dlHashes.size) loadHashesInBackground();
-    isSearching = true; resumePolling();
-  } catch(e) { err(e.message); $('results-wrap').innerHTML = '<div class="ml-empty">Error</div>'; }
+
+  if (curSearchTab === 'amule') {
+    $('search-amule-wrap').style.display = '';
+    pw.style.display = 'none';
+    $('results-wrap').innerHTML = '<div class="ml-empty">⌛ Buscando...</div>';
+    $('results-count').textContent = 'Buscando...';
+    try {
+      await api('POST', '/api/search/start', { query: q, type: $('search-type').value });
+      if (!knownHashes.size && !dlHashes.size) loadHashesInBackground();
+      isSearching = true; resumePolling();
+    } catch(e) { err(e.message); $('results-wrap').innerHTML = '<div class="ml-empty">Error</div>'; }
+  } else {
+    $('search-amule-wrap').style.display = 'none';
+    pw.style.display = '';
+    api('POST', '/api/search/start', { query: q, type: $('search-type').value }).then(() => {
+      if (!knownHashes.size && !dlHashes.size) loadHashesInBackground();
+      isSearching = true;
+    }).catch(()=>{});
+    const pl = searchPlugins.find(p => p.id === curSearchTab);
+    if (pl) loadPluginSearch(pl, q, pw);
+  }
+
+  for (const pl of searchPlugins) {
+    if (pl.id !== curSearchTab) {
+      const b = document.querySelector('#stabs .ml-dl-tab[onclick*="\''+pl.id+'\'"]');
+      if (b) { b.dataset.searchPending = '1'; b.style.opacity = '.5'; }
+    }
+  }
+
   btn.disabled = false; btn.textContent = 'Buscar';
 }
 $('search-btn').onclick = doSearch;
@@ -458,11 +491,18 @@ async function downloadFile(hash, btn) {
 async function loadDownloads() {
   const wrap = $('downloads-wrap');
   try {
-    const data = await api('GET', '/api/downloads');
-    dlHashes = new Set(data.map(f => f.fileHash).filter(Boolean));
-    $('dl-count').textContent = data.length+' archivo'+(data.length !== 1 ? 's' : '');
-    if (!data.length) { wrap.innerHTML = '<div class="ml-empty">Sin descargas activas</div>'; return; }
-    wrap.innerHTML = data.map(f => {
+    const [amule, ...pluginResults] = await Promise.all([
+      api('GET', '/api/downloads').catch(() => []),
+      ...dlPlugins.map(pl => fetch('/api/'+pl.id+'/jobs').then(r=>r.json()).then(jobs =>
+        jobs.filter(j => j.status !== 'done').map(j => ({_plugin:pl, ...j}))
+      ).catch(() => []))
+    ]);
+    const pluginJobs = pluginResults.flat();
+    const total = amule.length + pluginJobs.length;
+    dlHashes = new Set(amule.map(f => f.fileHash).filter(Boolean));
+    $('dl-count').textContent = total+' archivo'+(total !== 1 ? 's' : '');
+    if (!total) { wrap.innerHTML = '<div class="ml-empty">Sin descargas activas</div>'; return; }
+    const amuleHTML = amule.map(f => {
       const pct = parseFloat(f.progress || 0);
       return '<div class="ml-item">'
         +'<div class="ml-item-name">'+esc(f.fileName)+'</div>'
@@ -474,7 +514,24 @@ async function loadDownloads() {
         +'<button class="ml-btn-sm ml-btn-danger" onclick="dlAction(\'cancel\',\''+esc(f.fileHash)+'\',this)">🗑️</button>'
         +'</div></div>';
     }).join('');
+    const pluginHTML = pluginJobs.map(j => {
+      const pct = j.percent || 0;
+      return '<div class="ml-item">'
+        +'<div class="ml-item-name">'+esc(j.title||j.jobId)+'</div>'
+        +'<div class="ml-progress-wrap"><div class="ml-progress-bar" style="width:'+pct+'%;'+(j.status==='error'?'background:rgba(255,100,100,0.7)':'')+'"></div></div>'
+        +'<div class="ml-item-meta">'+esc(j._plugin.icon)+' '+esc(j._plugin.name)+' &nbsp;'
+        +(j.status==='error'?'❌ '+esc(j.error||''):pct+'%'+(j.speed?' &nbsp;⚡'+esc(j.speed):''))+'</div>'
+        +'<div class="ml-item-actions">'
+        +'<button class="ml-btn-sm ml-btn-danger" onclick="pluginJobCancel(\''+j._plugin.id+'\',\''+esc(j.jobId)+'\',this)">🗑️</button>'
+        +'</div></div>';
+    }).join('');
+    wrap.innerHTML = amuleHTML + pluginHTML;
   } catch(e) { if (!wrap.querySelector('.ml-item')) wrap.innerHTML = '<div class="ml-empty">Error cargando</div>'; }
+}
+async function pluginJobCancel(pluginId, jobId, btn) {
+  btn.disabled = true;
+  try { await fetch('/api/'+pluginId+'/jobs/'+jobId, {method:'DELETE'}); loadDownloads(); }
+  catch(e) { btn.disabled = false; err(e.message); }
 }
 async function dlAction(action, hash, btn) {
   btn.disabled = true;
@@ -487,23 +544,10 @@ async function dlAction(action, hash, btn) {
 function switchDlTab(tab) {
   curDlTab = tab;
   document.querySelectorAll('#dl-tabs .ml-dl-tab').forEach(b => b.classList.toggle('active', b.dataset.dltab === tab));
-  const isAmule = tab === 'amule' || tab === 'amule-done';
-  $('dl-downloading').style.display = tab === 'amule' ? '' : 'none';
-  $('dl-completed').style.display = tab === 'amule-done' ? '' : 'none';
-  const pw = $('dl-plugin-wrap');
-  pw.style.display = isAmule ? 'none' : '';
-  if (tab === 'amule') loadDownloads();
-  if (tab === 'amule-done') loadShared();
-  if (!isAmule) {
-    const pl = dlPlugins.find(p => p.id === tab);
-    if (pl) loadDlPlugin(pl, pw);
-  }
-}
-
-function loadDlPlugin(pl, wrap) {
-  if (wrap.dataset.loadedPlugin === pl.id) return;
-  wrap.dataset.loadedPlugin = pl.id;
-  loadPanel('plugins/'+pl.id+'.html', wrap);
+  $('dl-downloading').style.display = tab === 'downloading' ? '' : 'none';
+  $('dl-completed').style.display = tab === 'completed' ? '' : 'none';
+  if (tab === 'downloading') loadDownloads();
+  if (tab === 'completed') loadShared();
 }
 async function loadShared() {
   const wrap = $('shared-wrap');
