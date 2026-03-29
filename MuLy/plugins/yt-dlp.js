@@ -105,7 +105,7 @@ async function runDownload(job, url, type, binDir, tempDir, MB) {
 }
 
 module.exports = function(app, MB) {
-  const BIN_DIR = p.join(MB, 'bin');
+  const BIN_DIR = p.join(MB, '..', 'bin');
   const TEMP_DIR = p.join(MB, 'tmp-ytdlp');
   fs.mkdirSync(BIN_DIR, {recursive:true});
   fs.mkdirSync(TEMP_DIR, {recursive:true});
