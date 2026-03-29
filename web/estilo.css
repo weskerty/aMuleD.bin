@@ -12,8 +12,8 @@ body {
     font-family: 'OpenDyslexic', 'Fluent Emoji Color', sans-serif;
     color: white;
     overflow-x: hidden;
-    background-color: #000000;
-    background: url('otros/Archivos/Imagenes/pexels-eberhardgross-2098428.jpg') no-repeat center center fixed;
+    background-color: #00000000;
+    
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
