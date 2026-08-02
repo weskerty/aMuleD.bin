@@ -1,125 +1,46 @@
-cd repo
+#!/data/data/com.termux/files/usr/bin/bash
+
+BASE="$(cd "$(dirname "$0")" && pwd)"
+
+termux-wake-lock
+
+echo "Actualizando aMuTorrent"
+cd "$BASE"
 git fetch origin
 git reset --hard origin/master
-chmod -R +x Util/aMuleD.AppImage/
-rm -f ~/.aMule/muleLock .aMule/muleLock 2>/dev/null
 
-detect_arch() {
-  case "$(uname -m)" in
-    aarch64|arm64) echo "arm64" ;;
-    armv7*) echo "armv7" ;;
-    *) echo "x64" ;;
-  esac
-}
+echo "Actualizando WebUI"
+cd "$BASE/repo"
+git fetch origin
+git reset --hard origin/master
 
-detect_os() {
-  if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || -n "$WINDIR" ]]; then
-    echo "win"
-  else
-    echo "linux"
-  fi
-}
+echo "Instalando dependencias WebUI"
+cd "$BASE/repo/server"
+npm install-scripts approve --all
+CXXFLAGS="-std=c++2a" npm install
+cd "$BASE/repo"
+npm install-scripts approve --all
+npm install
+npm run build
 
-OS=$(detect_os)
-ARCH=$(detect_arch)
+echo "Iniciando Transmission"
+nohup transmission-daemon --config-dir="$BASE/conf/transmission" > "$BASE/conf/transmission.log" 2>&1 &
 
-if [[ "$OS" == "win" ]]; then
-  case "$(echo $PROCESSOR_ARCHITECTURE | tr '[:upper:]' '[:lower:]')" in
-    arm64) ARCH="arm64" ;;
-    *) ARCH="x64" ;;
-  esac
-  BIN="Util/aMuleD.AppImage/amuled-${ARCH}.exe"
-else
-  BIN="Util/aMuleD.AppImage/amuled-${ARCH}.AppImage"
-fi
+echo "Iniciando Prowlarr"
+nohup prowlarr --nobrowser --data="$BASE/conf/prowlarr" > "$BASE/conf/prowlarr.log" 2>&1 &
 
-FLAGS="--config-dir=.aMule"
-EXTRACT_DIR="../home/amuled"
-SUCCESS_THRESHOLD=600
-MAX_ATTEMPTS=3
-WORKING_METHOD=""
+echo "Iniciando Sonarr"
+#nohup sonarr -nobrowser -data="$BASE/conf/sonarr" > "$BASE/conf/sonarr.log" 2>&1 &
 
-start_server() {
-  cd MuLy 2>/dev/null || return
-  VOLTA_NPM="/opt/aMuleD.bin/home/.volta/bin/npm"
-  if [[ -x "$VOLTA_NPM" ]]; then
-    "$VOLTA_NPM" install --force && node server.js &
-  elif command -v volta &>/dev/null; then
-    volta run npm install --force && node server.js &
-  else
-    npm install --force && node server.js &
-  fi
-  cd ..
-}
+echo "Iniciando Radarr"
+#nohup radarr -nobrowser -data="$BASE/conf/radarr" > "$BASE/conf/radarr.log" 2>&1 &
 
-run_method_1() {
-  rm -f ~/.aMule/muleLock .aMule/muleLock 2>/dev/null
-  "$BIN" $FLAGS
-}
 
-run_method_2() {
-  rm -f ~/.aMule/muleLock .aMule/muleLock 2>/dev/null
-  "$BIN" --appimage-extract-and-run $FLAGS
-}
+echo "Iniciando WebUI"
+cd "$BASE/repo"
+nohup node server/server.js > "$BASE/conf/amutorrent.log" 2>&1 &
 
-run_method_3() {
-  rm -f ~/.aMule/muleLock .aMule/muleLock 2>/dev/null
-  mkdir -p "$EXTRACT_DIR"
-  rm -rf "$EXTRACT_DIR/squashfs-root" 2>/dev/null
-  cd "$EXTRACT_DIR" && "$OLDPWD/$BIN" --appimage-extract
-  ./squashfs-root/usr/bin/amuled $FLAGS
-  cd "$OLDPWD"
-}
+echo "Iniciando aMule"
+nohup proot-distro login debian -- bash -c "cd '$BASE/conf/aMule' && chmod +x aMule.AppImage && ./aMule.AppImage --appimage-extract > /dev/null 2>&1 && ./squashfs-root/usr/bin/amuled --config-dir='$BASE/conf/aMule'" > "$BASE/conf/amule.log" 2>&1 &
 
-try_method() {
-  local method_fn="$1"
-  local attempts=0
-  local first_fail=0
-
-  while true; do
-    local t_start=$(date +%s)
-    $method_fn
-    local elapsed=$(( $(date +%s) - t_start ))
-
-    if (( elapsed >= SUCCESS_THRESHOLD )); then
-      return 0
-    fi
-
-    attempts=$(( attempts + 1 ))
-    [[ $attempts -eq 1 ]] && first_fail=$(date +%s)
-
-    if (( attempts >= MAX_ATTEMPTS )); then
-      local window=$(( $(date +%s) - first_fail ))
-      if (( window < SUCCESS_THRESHOLD )); then
-        return 1
-      else
-        attempts=1
-        first_fail=$(date +%s)
-      fi
-    fi
-
-    sleep 2
-  done
-}
-
-watchdog() {
-  local method_fn="$1"
-  while true; do
-    rm -f ~/.aMule/muleLock .aMule/muleLock 2>/dev/null
-    $method_fn
-    sleep 2
-  done
-}
-
-start_server
-
-while true; do
-  for method in run_method_1 run_method_2 run_method_3; do
-    if try_method "$method"; then
-      WORKING_METHOD="$method"
-      break 2
-    fi
-  done
-done
-
-watchdog "$WORKING_METHOD"
+echo "Todo iniciado"
