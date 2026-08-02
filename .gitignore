@@ -1,3 +1,7 @@
+conf/
+repo/
+
+
 # Logs
 logs
 *.log
