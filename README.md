@@ -20,17 +20,18 @@ Suite P2P en tu Bolsillo
 <table>
   <tr>
     <td><img width="400" src="https://github.com/user-attachments/assets/40d1ae31-95b8-4fe7-8a7c-2f592d009f2e"></td>
-    <td><img width="400" src=""></td>
+    <td><img width="400" src="https://github.com/user-attachments/assets/c0b6cbb6-c079-452b-a630-544151c69123"></td>
   </tr>
   <tr>
-    <td>Termux GPlay A16</td>
-    <td>Termux FDroid A16</td>
+    <td>Termux A16</td>
+    <td>RN8 + OTG</td>
   </tr>
-
-
   </table>
+  El consumo electrico es Minimo, menos que un foco. Aun menor sin disco duro. 
 
 </div>
+
+
 
 
 ## Instalacion
@@ -63,6 +64,12 @@ admin
 
 Para ajustar Radarr, Sonar y Prowlarr accede con sus respectivos Puertos.
 
+### Almacenamiento Externo - Discos Duros USB OTG
+Hay diversas formas de almacenamiento
+- Enlace Simbolico a MicroSD (Muchos telefonos soportan hasta 2TB en SD)
+- Enlace Simbolico a Disco Duro OTG (o varios con mergerfs. no funciona en termux falta modificar su fuse.)
+- SFTP con otras maquinas
+- NFS con otras maquinas (NFS paquete requiere root)
 
 # Termux Google Play Store
 <img width="1000" height="266" alt="zzzgoogle" src="https://github.com/user-attachments/assets/abf89ae6-bf50-43de-b20a-c257a5d1f19e" />
