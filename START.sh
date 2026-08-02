@@ -12,7 +12,7 @@ git reset --hard origin/master
 echo "Actualizando WebUI"
 cd "$BASE/repo"
 git fetch origin
-git reset --hard origin/master
+git reset --hard origin/main
 
 echo "Instalando dependencias WebUI"
 cd "$BASE/repo/server"
@@ -28,6 +28,15 @@ cd "$BASE/repo"
 npm install-scripts approve --all
 npm install
 npm run build
+
+echo "Actualizando trackers"
+curl -s https://cf.trackerslist.com/all.txt -o "$BASE/conf/transmission/list1.txt"
+curl -s https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt -o "$BASE/conf/transmission/list2.txt"
+cat "$BASE/conf/transmission/list1.txt" "$BASE/conf/transmission/list2.txt" 2>/dev/null | grep -E "^(http|udp|wss)" | sort -u | awk 'BEGIN{ORS="\n\n"}{print}' > "$BASE/conf/transmission/trackers.txt"
+if [ -s "$BASE/conf/transmission/trackers.txt" ]; then
+  TRACKERS_JSON=$(jq -Rs . < "$BASE/conf/transmission/trackers.txt")
+  jq --argjson t "$TRACKERS_JSON" '.["default-trackers"] = $t' "$BASE/conf/transmission/settings.json" > "$BASE/conf/transmission/settings.json.tmp" && mv "$BASE/conf/transmission/settings.json.tmp" "$BASE/conf/transmission/settings.json"
+fi
 
 echo "Iniciando Transmission"
 nohup transmission-daemon --config-dir="$BASE/conf/transmission" > "$BASE/conf/transmission.log" 2>&1 &
