@@ -36,9 +36,9 @@ Suite P2P en tu Bolsillo
 ## Instalacion
 
 ### Android 
-Descarga e Instala Termux: [Termux Here↗️](https://github.com/termux/termux-app/releases) 
+Descarga e Instala Termux desde aqui: [Termux Repo ↗️](https://github.com/termux/termux-app/releases) 
 
-Abre Termux y Pega esto:
+Luego abre Termux y pega esto:
 
 ```
 curl -fsSL https://raw.githubusercontent.com/weskerty/aMuleD.bin/refs/heads/master/INSTALL.sh | bash
@@ -46,8 +46,27 @@ curl -fsSL https://raw.githubusercontent.com/weskerty/aMuleD.bin/refs/heads/mast
 ```
 Apareceran Preguntas de "Permitir Acceder a Todos los Archivos" y "Permitir Ejecucion en Segundo plano sin Restriccion de Bateria?" y en ambos marcas SI.
 
+Luego de un rato el Servicio estara listo, veras un mensaje "Inicia en el Navegador"
+
+Entra a [http://localhost:4000 ↗️](http://localhost:4000)  para controlar.
+
+## Usuario: 
+```
+admin
+
+```
+## Contraseña
+```
+1234567890-p
+
+```
+
+Para ajustar Radarr, Sonar y Prowlarr accede con sus respectivos Puertos.
+
+
 # Termux Google Play Store
-<img width="1000" height="485" alt="zzzPlayStore" src="https://github.com/user-attachments/assets/1dc84f42-9b31-4b5e-a6b7-0a7a8a8b91bb" />
+<img width="1000" height="266" alt="zzzgoogle" src="https://github.com/user-attachments/assets/abf89ae6-bf50-43de-b20a-c257a5d1f19e" />
+
 
 La version que encuentras en PlayStore no funciona bien, el servicio se Ejecutara, pero no tendra: Radarr, Sonarr ni Prowlarr, solo funcionara la Busqueda aMule.
 
