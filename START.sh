@@ -35,6 +35,8 @@ echo "Iniciando Sonarr"
 echo "Iniciando Radarr"
 #nohup radarr -nobrowser -data="$BASE/conf/radarr" > "$BASE/conf/radarr.log" 2>&1 &
 
+echo "Iniciando Caddy"
+#nohup caddy run --config "$BASE/conf/Caddyfile" > "$BASE/conf/caddy.log" 2>&1 &
 
 echo "Iniciando WebUI"
 cd "$BASE/repo"
