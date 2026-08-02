@@ -1,0 +1,39 @@
+name: Actualizar aMule AppImage
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 1 * *'
+
+jobs:
+  update-amule:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Obtener ultima release
+        id: GR1
+        run: |
+          URL=$(curl -s https://api.github.com/repos/amule-org/amule/releases/latest \
+            | grep "browser_download_url" \
+            | grep "Linux-arm64.AppImage" \
+            | cut -d '"' -f 4)
+
+          if [ -z "$URL" ]; then
+            echo "Error Release No encontrado"
+            exit 1
+          fi
+
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Encontrado $URL"
+
+      - name: Descargar AppImage
+        run: |
+          curl -L "${{ steps.GR1.outputs.url }}" -o conf/aMule/aMule.AppImage
+
+      - name: Commit y push
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
+          commit_message: Actualizar aMule AppImage
+          file_pattern: conf/aMule/aMule.AppImage
