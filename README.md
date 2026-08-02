@@ -44,7 +44,7 @@ Install [Termux Here↗️](https://github.com/termux/termux-app/releases)
 Open Termux and Paste; 
 
 ```
-curl -fsSL https://raw.githubusercontent.com/weskerty/aMuleD.bin/refs/heads/master/Util/Scripts/TermuxI.sh | bash
+curl -fsSL https://raw.githubusercontent.com/weskerty/aMuleD.bin/refs/heads/master/INSTALL.sh | bash
 
 ```
 Allow Permissions
