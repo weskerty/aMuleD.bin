@@ -1,7 +1,8 @@
+<h1> </h1>
 <div style="text-align:center;"
 <p align="center">
 <img src="https://github.com/user-attachments/assets/2c2d84b9-127e-4257-a5e4-cac54c557944" alt="Muly" width="170">
-<h1 align="center">aMuTorrent en Termux</h1> 
+<h1>aMuTorrent en Termux</h1> 
 Suite P2P en tu Bolsillo
 
   <table>
