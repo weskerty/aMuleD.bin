@@ -17,13 +17,13 @@ git reset --hard origin/master
 echo "Instalando dependencias WebUI"
 cd "$BASE/repo/server"
 npm install-scripts approve --all
-CXXFLAGS="-std=c++2a" npm install
 if [ ! -f node_modules/better-sqlite3/build/Release/better_sqlite3.node ]; then
   echo "Compilando better-sqlite3 nativo"
-  cd node_modules/better-sqlite3
-  CXXFLAGS="-std=c++2a" npx node-gyp rebuild --release
-  cd "$BASE/repo/server"
+  CXXFLAGS="-std=c++2a" npm install better-sqlite3@latest
+  npm install-scripts approve --all
+  CXXFLAGS="-std=c++2a" npm rebuild better-sqlite3
 fi
+CXXFLAGS="-std=c++2a" npm install
 cd "$BASE/repo"
 npm install-scripts approve --all
 npm install
