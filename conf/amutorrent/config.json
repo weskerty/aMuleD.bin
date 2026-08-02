@@ -7,7 +7,7 @@
     "port": 4000,
     "auth": {
       "enabled": true,
-      "password": "1234567890-p",
+      "password": "",
       "sessionSecret": "75e020430984ebf3105f4de4f8c4c3550eeb00a021901a35136677c45e813068",
       "adminUsername": "",
       "trustedProxy": {
@@ -29,8 +29,26 @@
       "port": 9091,
       "path": "/transmission/rpc",
       "username": "admin",
+      "useSsl": false,
+      "password": "1234567890-p"
+    },
+    {
+      "id": "amule-127.0.0.1-4712",
+      "type": "amule",
+      "name": "aMule",
+      "color": null,
+      "enabled": true,
+      "host": "127.0.0.1",
+      "port": 4712,
+      "sharedFilesReloadIntervalHours": 3,
+      "categorySync": true,
+      "notifications": true,
       "password": "1234567890-p",
-      "useSsl": false
+      "sharedDirDatPath": "/data/data/com.termux/files/home/aMuTorrent/conf/aMule/shareddir.dat",
+      "sharedDirRoots": [
+        "/data/data/com.termux/files/home/storage/shared/Download/aMuTorrent",
+        "/data/data/com.termux/files/home/storage/shared/Music"
+      ]
     }
   ],
   "directories": {
@@ -41,15 +59,15 @@
   "integrations": {
     "amuleInstanceId": null,
     "sonarr": {
-      "enabled": false,
-      "url": "",
-      "apiKey": "",
+      "enabled": true,
+      "url": "http://localhost:8989/",
+      "apiKey": "ba483cd6ae024a4c8540dbab69364691",
       "searchIntervalHours": 6
     },
     "radarr": {
-      "enabled": false,
-      "url": "",
-      "apiKey": "",
+      "enabled": true,
+      "url": "http://localhost:7878/",
+      "apiKey": "ffdbf21d8788412c84c2612ebd1e0e76",
       "searchIntervalHours": 6
     },
     "prowlarr": {

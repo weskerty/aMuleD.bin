@@ -1,16 +1,16 @@
 <Config>
   <BindAddress>*</BindAddress>
-  <Port>8989</Port>
+  <Port>7878</Port>
   <SslPort>9898</SslPort>
   <EnableSsl>False</EnableSsl>
   <LaunchBrowser>True</LaunchBrowser>
-  <ApiKey>ba483cd6ae024a4c8540dbab69364691</ApiKey>
-  <AuthenticationMethod>Basic</AuthenticationMethod>
+  <ApiKey>ffdbf21d8788412c84c2612ebd1e0e76</ApiKey>
+  <AuthenticationMethod>Forms</AuthenticationMethod>
   <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
-  <Branch>main</Branch>
+  <Branch>master</Branch>
   <LogLevel>debug</LogLevel>
   <SslCertPath></SslCertPath>
   <SslCertPassword></SslCertPassword>
   <UrlBase></UrlBase>
-  <InstanceName>Sonarr</InstanceName>
+  <InstanceName>Radarr</InstanceName>
 </Config>
