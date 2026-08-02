@@ -7,13 +7,8 @@
     "port": 4000,
     "auth": {
       "enabled": true,
-<<<<<<< Updated upstream
       "password": "1234567890-p",
       "sessionSecret": "ded19650abf48a483f7fe9b6e74f958d42de5cf5995c38069e8bbabc0d57f991",
-=======
-      "password": "",
-      "sessionSecret": "75e020430984ebf3105f4de4f8c4c3550eeb00a021901a35136677c45e813068",
->>>>>>> Stashed changes
       "adminUsername": "",
       "trustedProxy": {
         "enabled": false,
@@ -45,26 +40,8 @@
       "port": 9091,
       "path": "/transmission/rpc",
       "username": "admin",
-      "useSsl": false,
-      "password": "1234567890-p"
-    },
-    {
-      "id": "amule-127.0.0.1-4712",
-      "type": "amule",
-      "name": "aMule",
-      "color": null,
-      "enabled": true,
-      "host": "127.0.0.1",
-      "port": 4712,
-      "sharedFilesReloadIntervalHours": 3,
-      "categorySync": true,
-      "notifications": true,
       "password": "1234567890-p",
-      "sharedDirDatPath": "/data/data/com.termux/files/home/aMuTorrent/conf/aMule/shareddir.dat",
-      "sharedDirRoots": [
-        "/data/data/com.termux/files/home/storage/shared/Download/aMuTorrent",
-        "/data/data/com.termux/files/home/storage/shared/Music"
-      ]
+      "useSsl": false
     }
   ],
   "directories": {
@@ -76,21 +53,13 @@
     "amuleInstanceId": null,
     "sonarr": {
       "enabled": true,
-<<<<<<< Updated upstream
       "url": "http://localhost:8989",
-=======
-      "url": "http://localhost:8989/",
->>>>>>> Stashed changes
       "apiKey": "ba483cd6ae024a4c8540dbab69364691",
       "searchIntervalHours": 6
     },
     "radarr": {
       "enabled": true,
-<<<<<<< Updated upstream
       "url": "http://localhost:7878",
-=======
-      "url": "http://localhost:7878/",
->>>>>>> Stashed changes
       "apiKey": "ffdbf21d8788412c84c2612ebd1e0e76",
       "searchIntervalHours": 6
     },
