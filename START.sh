@@ -57,11 +57,11 @@ nohup transmission-daemon --config-dir="$BASE/conf/transmission" > "$BASE/conf/t
 echo "Iniciando Prowlarr"
 nohup prowlarr --nobrowser --data="$BASE/conf/prowlarr" > "$BASE/conf/prowlarr.log" 2>&1 &
 
-#echo "Iniciando Sonarr"
-#nohup sonarr -nobrowser -data="$BASE/conf/sonarr" > "$BASE/conf/sonarr.log" 2>&1 &
+echo "Iniciando Sonarr"
+nohup sonarr -nobrowser -data="$BASE/conf/sonarr" > "$BASE/conf/sonarr.log" 2>&1 &
 
-#echo "Iniciando Radarr"
-#nohup radarr -nobrowser -data="$BASE/conf/radarr" > "$BASE/conf/radarr.log" 2>&1 &
+echo "Iniciando Radarr"
+nohup radarr -nobrowser -data="$BASE/conf/radarr" > "$BASE/conf/radarr.log" 2>&1 &
 
 echo "Iniciando WebUI"
 cd "$BASE/repo"
