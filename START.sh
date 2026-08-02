@@ -18,6 +18,12 @@ echo "Instalando dependencias WebUI"
 cd "$BASE/repo/server"
 npm install-scripts approve --all
 CXXFLAGS="-std=c++2a" npm install
+if [ ! -f node_modules/better-sqlite3/build/Release/better_sqlite3.node ]; then
+  echo "Compilando better-sqlite3 nativo"
+  cd node_modules/better-sqlite3
+  CXXFLAGS="-std=c++2a" npx node-gyp rebuild --release
+  cd "$BASE/repo/server"
+fi
 cd "$BASE/repo"
 npm install-scripts approve --all
 npm install
