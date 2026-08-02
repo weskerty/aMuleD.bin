@@ -27,7 +27,7 @@ Suite P2P en tu Bolsillo
     <td>RN8 + OTG</td>
   </tr>
   </table>
-  El consumo electrico es Minimo, menos que un foco. Aun menor sin disco duro. 
+  El consumo electrico es Minimo, menos que un foco. Aun menor sin disco duro. Puedes Reutilizar Dispositivos Android Antiguos (Desde Android 5). Cuidemos el Mundo que Dios nos dio ❤️
 
 </div>
 
@@ -49,7 +49,9 @@ Apareceran Preguntas de "Permitir Acceder a Todos los Archivos" y "Permitir Ejec
 
 Luego de un rato el Servicio estara listo, veras un mensaje "Inicia en el Navegador"
 
-Entra a [http://localhost:4000 ↗️](http://localhost:4000)  para controlar. Las descargas apareceran en Downloads/aMuTorrent/
+Entra a [http://localhost:4000 ↗️](http://localhost:4000)  para controlar o desde otro dispositivo con la IP local del Telefono Servidor.
+
+Las descargas aparecen en Downloads/aMuTorrent/
 
 ## Usuario: 
 ```
@@ -62,7 +64,8 @@ admin
 
 ```
 
-Para ajustar Radarr, Sonar y Prowlarr accede con sus respectivos Puertos.
+Para ajustar [Radarr ↗️](https://radarr.video/), [Sonarr ↗️](https://sonarr.tv/) y [Prowlarr ↗️](https://prowlarr.com/docs/api/) accede con sus respectivos Puertos.
+
 
 ### Almacenamiento Externo - Discos Duros USB OTG
 Hay diversas formas de almacenamiento
@@ -71,13 +74,21 @@ Hay diversas formas de almacenamiento
 - SFTP con otras maquinas
 - NFS con otras maquinas (NFS paquete requiere root)
 
-El Instalador crea el enlace simbolico Downloads/aMuTorrent/
+
 
 # Termux Google Play Store
 <img width="1000" height="266" alt="zzzgoogle" src="https://github.com/user-attachments/assets/abf89ae6-bf50-43de-b20a-c257a5d1f19e" />
 
 
-La version que encuentras en PlayStore no funciona bien, el servicio se Ejecutara, pero no tendra: Radarr, Sonarr ni Prowlarr, solo funcionara la Busqueda aMule.
+La version que encuentras en PlayStore no funciona bien, el servicio se ejecutara, pero no funcionara: [Radarr ↗️](https://radarr.video/), [Sonarr ↗️](https://sonarr.tv/) ni [Prowlarr ↗️](https://prowlarr.com/docs/api/) solo funcionara la  [Busqueda aMule ↗️](https://amule-org.github.io/docs) y descargas directas de [Transmission ↗️](https://transmissionbt.com/)
+
+# No Funciona?
+En nuevas versiones de Android (A12 y Superior) el sistema no permite que Termux se mantenga vivo en segundo plano
+Para solucionar esto Necesitas Hacer unos pasos extra para Corregir.
+1- Ajustes de tu Telefono > Bateria > Prioridad a Termux en Todo, Inicio automatico, de fondo, etc.
+2- Activar Depuracion USB (ADB) en Ajustes de Desarrollador de Android [Como? ↗️](https://transmissionbt.com/)
+3- Luego ve a [ADB Tools ↗️](https://cheagana.com/#web/otros/Archivos/Dinamico/%F0%9F%A7%A9%20Apps/%F0%9F%92%9A%20Android/Gestor%20Android%20-%20Apps&+.md) desde otro Dispositivo, Conecta el Dispositivo a Parchear por USB y luego Presiona el boton "Conectar", selecciona el dispositivo conectado, luego en el telefono aparecera "Permitir este Ordenador?" reponde SI, Luego en la Web presionas el boton "Comandos" y luego "Termux Alive" y listo, ya estaria.
+
 
 
 
