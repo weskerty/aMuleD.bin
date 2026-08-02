@@ -2,14 +2,21 @@
 
 echo "Solicitando permisos"
 termux-wake-lock
-printf 'y\y' | termux-setup-storage
+printf 'y\n' | termux-setup-storage
 sleep 3
 
 echo "Agregando repos"
 pkg install -y tur-repo x11-repo
 
 echo "Actualizando paquetes"
-apt update -y && yes | apt upgrade && pkg install -y git proot-distro wget nodejs-lts clang lld libc++ prowlarr transmission sonarr radarr caddy
+apt update -y
+yes | apt upgrade
+pkg install -y git proot-distro wget nodejs-lts clang lld libc++
+pkg install -y prowlarr
+pkg install -y transmission
+pkg install -y sonarr
+pkg install -y radarr
+pkg install -y caddy
 
 echo "Instalando Debian en proot-distro"
 proot-distro install debian
