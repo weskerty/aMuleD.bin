@@ -1,93 +1,55 @@
 <div style="text-align:center;"
 <p align="center">
-<img src="web/ICON.png" alt="Muly" width="170">
-<h1 align="center">MuLy - aMuleD</h1>
-1. aMule for All Platforms. Unify all efforts into aMuleD.
-Linux x64 & ARM64/v7 is compatible with Termux Debian and also with Windows WSL.
+<img src="https://github.com/user-attachments/assets/2c2d84b9-127e-4257-a5e4-cac54c557944" alt="Muly" width="170">
+<h1 align="center">aMuTorrent en Termux</h1> 
+Suite P2P en tu Bolsillo
+
   <table>
     <tr>
-      <td><img width="400" src="https://github.com/user-attachments/assets/758691b0-f092-4aae-ba91-e433878b0a02" /></td>
-      <td><img width="400" src="https://github.com/user-attachments/assets/13e525fc-75aa-42d0-948a-de9568ece95a" /></td>
+      <td><img width="400" src="https://raw.githubusercontent.com/got3nks/amutorrent/main/docs/screenshots/home-mobile.png" /></td>
+      <td><img width="400" src="https://raw.githubusercontent.com/got3nks/amutorrent/main/docs/screenshots/downloads-mobile.png" /></td>
+      <td><img width="400" src="https://raw.githubusercontent.com/got3nks/amutorrent/main/docs/screenshots/history-mobile.png" /></td>
     </tr>
-    <tr>
-      <td><img width="400" src="https://github.com/user-attachments/assets/178e67ab-35d3-4600-85f6-625efbedaa3c" /></td>
-      <td><img width="400" src="" /></td>
-    </tr>
+
 
   </table>
   
-  One Binary for All Platforms.
-Being able to use your old device to serve files gives it new life and prevents technological waste.
-Your old Android device might work; it has low power consumption and allows you to add drives via OTG.
-Reuse, don't throw away.
+# Consumo Minimo de Recursos
 
-  <table>
-    <tr>
-      <td><img width="400" src="https://github.com/user-attachments/assets/d98ca640-98be-45d0-98ab-b7ef814957af" /></td>
-      <td><img width="400" src="" /></td>
-    </tr>
+
+<table>
+  <tr>
+    <td><img width="400" src="https://github.com/user-attachments/assets/40d1ae31-95b8-4fe7-8a7c-2f592d009f2e"></td>
+    <td><img width="400" src=""></td>
+  </tr>
+  <tr>
+    <td>Termux GPlay A16</td>
+    <td>Termux FDroid A16</td>
+  </tr>
+
+
   </table>
-
-
-
-https://github.com/user-attachments/assets/a9deafd4-17b3-4409-a5fb-80e1b22664a0
-
 
 </div>
 
 
-## Install 
- 
-### Android 
-Install [Termux Here↗️](https://github.com/termux/termux-app/releases) 
+## Instalacion
 
-Open Termux and Paste; 
+### Android 
+Descarga e Instala Termux: [Termux Here↗️](https://github.com/termux/termux-app/releases) 
+
+Abre Termux y Pega esto:
 
 ```
 curl -fsSL https://raw.githubusercontent.com/weskerty/aMuleD.bin/refs/heads/master/INSTALL.sh | bash
 
 ```
-Allow Permissions
+Apareceran Preguntas de "Permitir Acceder a Todos los Archivos" y "Permitir Ejecucion en Segundo plano sin Restriccion de Bateria?" y en ambos marcas SI.
 
+# Termux Google Play Store
+<img width="1000" height="485" alt="zzzPlayStore" src="https://github.com/user-attachments/assets/1dc84f42-9b31-4b5e-a6b7-0a7a8a8b91bb" />
 
-### Windows
-
-```
-
-```
-
-
-
-### Linux 
-
-```
-
-```
-
-
-
-
-
-
- 
-Alternatively, you can install the official versions of aMule from official repositories and install only the web version of aMule on your own.
-
-
-#### Arch Linux
-
-`chaotic-aur/amule-git
-    Client for the eD2k and Kad networks                                      
-extra/amule (OldVersion)
-    An eMule-like client for ed2k p2p network`
-
-
-It's easy to install with ChaoticAUR.
-
-
-
-
-### Best P2P Manager
-
+La version que encuentras en PlayStore no funciona bien, el servicio se Ejecutara, pero no tendra: Radarr, Sonarr ni Prowlarr, solo funcionara la Busqueda aMule.
 
 
 
