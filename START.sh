@@ -22,12 +22,11 @@ cd "$BASE"
 git fetch origin
 git reset --hard origin/master
 
-echo "Actualizando WebUI"
 cd "$BASE/repo"
 git fetch origin
 git reset --hard origin/main
 
-echo "Instalando dependencias WebUI"
+echo "Actualizando mas duro"
 cd "$BASE/repo/server"
 npm install-scripts approve --all
 if [ ! -f node_modules/better-sqlite3/build/Release/better_sqlite3.node ]; then
@@ -42,7 +41,7 @@ npm install-scripts approve --all
 npm install
 npm run build
 
-echo "Actualizando trackers"
+echo "Actualizando actualizadores "
 curl -s https://cf.trackerslist.com/all.txt -o "$BASE/conf/transmission/list1.txt"
 curl -s https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt -o "$BASE/conf/transmission/list2.txt"
 cat "$BASE/conf/transmission/list1.txt" "$BASE/conf/transmission/list2.txt" 2>/dev/null | grep -E "^(http|udp|wss)" | sort -u | awk 'BEGIN{ORS="\n\n"}{print}' > "$BASE/conf/transmission/trackers.txt"
@@ -70,4 +69,8 @@ node server/server.js &
 echo "Iniciando aMule"
 nohup proot-distro login debian -- bash -c "cd '$BASE/conf/aMule' && chmod +x aMule.AppImage && ./aMule.AppImage --appimage-extract > /dev/null 2>&1 && ./squashfs-root/usr/bin/amuled --config-dir='$BASE/conf/aMule'" > "$BASE/conf/amule.log" 2>&1 &
 
-echo "Todo iniciado"
+echo -e "\e[1;36m┌─────────────────────────────────┐\e[0m"
+echo -e "\e[1;36m│ \e[1;32m🚀 Abre localhost:4000 \e[1;36m│\e[0m"
+echo -e "\e[1;36m└─────────────────────────────────┘\e[0m"
+echo -e "\e[1;33m⚠️ LISTO INICIA la Web Control en localhost:4000 \e[0m"
+echo -e "\e[1;33m⚠️ o desde otro dispositivo en: http://$(ip route get 1 | awk '{print $7; exit}'):4000\e[0m"

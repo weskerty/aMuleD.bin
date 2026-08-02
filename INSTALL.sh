@@ -27,6 +27,16 @@ pkg install -y sonarr
 pkg install -y radarr
 pkg install -y caddy
 
+echo "Configurando node-gyp para Termux"
+mkdir -p ~/.gyp
+cat > ~/.gyp/include.gypi << 'EOF'
+{
+	'variables': {
+		'android_ndk_path': ''
+	}
+}
+EOF
+
 echo "Instalando Debian en proot-distro"
 proot-distro install debian
 
@@ -40,9 +50,11 @@ git clone --depth 1 https://github.com/got3nks/amutorrent.git aMuTorrent/repo
 echo "Creando symlinks"
 mkdir -p aMuTorrent/conf/amutorrent
 mkdir -p aMuTorrent/conf/amutorrent-logs
+mkdir -p aMuTorrent/conf/amutorrent/geoip
 cd aMuTorrent/repo/server
 ln -s ../../conf/amutorrent data
 ln -s ../../conf/amutorrent-logs logs
+ln -s ../../conf/amutorrent/geoip geoip
 cd ~/aMuTorrent
 
 echo "Dando permisos"
