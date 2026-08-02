@@ -1,0 +1,77 @@
+---
+id: pornotorrent
+name: PornoTorrent
+description: "PornoTorrent is a BRAZILIAN Public Torrent Tracker for 3X"
+language: pt-BR
+type: public
+encoding: UTF-8
+testlinktorrent: false
+links:
+  - https://pornotorrent.com.br/
+legacylinks:
+  - https://www.pornotorrent.eu/
+  - https://pornotorrent.net.br/
+
+caps:
+  categorymappings:
+    # from https://pornotorrent.com.br/torznab?t=caps
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 6080, cat: XXX/SD, desc: "XXX/SD"}
+    - {id: 6090, cat: XXX/WEB-DL, desc: "XXX/WEB-DL"}
+
+  modes:
+    search: [q]
+    movie-search: [q]
+
+settings: []
+
+search:
+  paths:
+    - path: torznab/
+      method: get
+      response:
+        type: xml
+
+  inputs:
+    t: search
+    q: "{{ .Keywords }}"
+    limit: 100
+
+  rows:
+    selector: channel > item
+
+  fields:
+    category:
+      # the feed puts the specific category first, the 6000 parent second
+      selector: "[name=category]"
+      attribute: value
+    title:
+      selector: title
+    details:
+      selector: guid
+    magnet:
+      selector: enclosure
+      attribute: url
+    size_check:
+      selector: size
+    size:
+      text: "{{ if eq .Result.size_check \"0\" }}5GB{{ else }}{{ .Result.size_check }}{{ end }}"
+    date:
+      # Sat, 01 Aug 2026 01:00:00 GMT
+      selector: pubDate
+      filters:
+        - name: replace
+          args: ["GMT", "+00:00"]
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    seeders:
+      text: 1
+    leechers:
+      text: 0
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+# torznab xml

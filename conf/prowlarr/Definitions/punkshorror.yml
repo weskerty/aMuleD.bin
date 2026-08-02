@@ -1,0 +1,155 @@
+---
+id: punkshorror
+name: Punk's Horror Tracker
+description: "Punk's Horror Tracker is a HUNGARIAN Private Tracker for Horror MOVIES / TV"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://punck-tracker.net/
+
+caps:
+  categorymappings:
+    - {id: 87, cat: Movies, desc: "Action Eng"}
+    - {id: 88, cat: Movies, desc: "Action Hun"}
+    - {id: 79, cat: TV/Documentary, desc: "Dokumentumfilm"}
+    - {id: 89, cat: Movies, desc: "Horror Anime"}
+    - {id: 78, cat: Books, desc: "Horror Ebook"}
+    - {id: 66, cat: Movies, desc: "Horror Eng"}
+    - {id: 65, cat: Movies, desc: "Horror Hun"}
+    - {id: 82, cat: XXX, desc: "Horror XXX"}
+    - {id: 94, cat: Movies, desc: "Kamerás filmek"}
+    - {id: 98, cat: Movies/HD, desc: "MD-HD"}
+    - {id: 86, cat: Movies, desc: "Mystery-Fantasy Eng"}
+    - {id: 85, cat: Movies, desc: "Mystery-Fantasy Hun"}
+    - {id: 83, cat: Movies, desc: "Punk Release"}
+    - {id: 76, cat: Movies, desc: "Retro Film"}
+    - {id: 70, cat: Movies, desc: "Scifi Eng"}
+    - {id: 69, cat: Movies, desc: "Scifi Hun"}
+    - {id: 75, cat: TV, desc: "Sorozat Eng"}
+    - {id: 74, cat: TV, desc: "Sorozat Hun"}
+    - {id: 100, cat: Movies, desc: "THC Release"}
+    - {id: 68, cat: Movies, desc: "Thriller Eng"}
+    - {id: 67, cat: Movies, desc: "Thriller Hun"}
+    - {id: 84, cat: Movies/SD, desc: "VHS Ritkaságok"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      1: title
+      4: added
+      5: size
+      7: seeders
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek száma egy oldalon</b> setting to <b>100</b> on your account profile.
+
+login:
+  # using cookie method because login page has embedded Cloudflare turnstile
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href^="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 all, 2 deadonly, 3 uploaded, 4 waitingforseed
+    incldead: 1
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    # does not support imdbid searches
+
+  rows:
+    selector: "table table table > tbody > tr:has(a[href^=\"details.php?id=\"]){{ if .Config.freeleech }}:has(td:nth-last-child(4) span:nth-of-type(1):contains(\"0\")){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_default:
+      # can be abbreviated
+      selector: a[href^="details.php?id="]
+    title:
+      # usually full length
+      selector: a[href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date:
+      selector: td:nth-last-child(5)
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    poster:
+      selector: a.preview
+      attribute: href
+    size:
+      selector: td:nth-last-child(4) b
+    files:
+      selector: td:nth-last-child(7)
+    grabs:
+      selector: td:nth-last-child(3)
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    description:
+      case:
+        img[src="pic/yes.png"]: Verified
+        img[src="pic/nincs.png"]: Unverified
+    downloadvolumefactor:
+      selector: td:nth-last-child(4) span:nth-of-type(1)
+    uploadvolumefactor:
+      selector: td:nth-last-child(4) span:nth-of-type(2)
+    minimumratio:
+      text: 0.8
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a

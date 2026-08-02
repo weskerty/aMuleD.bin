@@ -1,0 +1,142 @@
+ 2026-08-02 09:37:53: Initialising aMuleD 3.0.1 compiled with wxBase(GTK3) v3.2.6 and Boost 1.74
+ 2026-08-02 09:37:53: Checking if there is an instance already running...
+ 2026-08-02 09:37:53: No other instances are running.
+ 2026-08-02 09:37:53: 09:37:53: Error: Directory 'MuLy/Archivos/Temp' couldn't be created (error 2: No such file or directory)
+!2026-08-02 09:37:53: ERROR: Error accessing directory. Could not create the temp directory at 'MuLy/Archivos/Temp'.
+!2026-08-02 09:37:53: Attempting to use default directory at location 
+!2026-08-02 09:37:53: '/data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/Temp'.
+ 2026-08-02 09:37:53: 09:37:53: Error: Directory 'MuLy/Archivos/' couldn't be created (error 2: No such file or directory)
+!2026-08-02 09:37:53: ERROR: Error accessing directory. Could not create the incoming directory at 'MuLy/Archivos/'.
+!2026-08-02 09:37:53: Attempting to use default directory at location 
+!2026-08-02 09:37:53: '/data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/Incoming'.
+!2026-08-02 09:37:53: ERROR: ERROR The folder for Online Signature files you specified is INVALID!
+!2026-08-02 09:37:53:  OnlineSignature will be DISABLED until you fix it on preferences.
+!2026-08-02 09:37:53: ERROR: WARNING Warning! You are running aMule as root.
+!2026-08-02 09:37:53: Doing so is not recommended for security reasons,
+!2026-08-02 09:37:53: and you are advised to run aMule as an normal
+!2026-08-02 09:37:53: user instead.
+!2026-08-02 09:37:53: ERROR: Info  --- This is the first time you run aMule 3.0.1 ---
+!2026-08-02 09:37:53: More information, support and new releases can found at our homepage,
+!2026-08-02 09:37:53: at https://amule-org.github.io, or in our IRC channel #aMule at irc.libera.chat.
+!2026-08-02 09:37:53: Feel free to report any bugs to https://github.com/amule-org/amule/issues
+ 2026-08-02 09:37:53: No 'cryptkey.dat' file found, creating.
+ 2026-08-02 09:37:53: *** TCP socket (ECServer) listening on 0.0.0.0:4712
+ 2026-08-02 09:37:53: Created Server UDP-Socket at port 4665
+ 2026-08-02 09:37:53: ListenSocket: Ok.
+ 2026-08-02 09:37:53: Created Client UDP-Socket at port 4672
+ 2026-08-02 09:37:54: Loading server.met file: /data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/server.met
+!2026-08-02 09:37:54: 57 servers in server.met found
+ 2026-08-02 09:37:54: Loading temp files from /data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/Temp.
+ 2026-08-02 09:37:54: All PartFiles Loaded.
+ 2026-08-02 09:37:54: No part files found
+ 2026-08-02 09:37:54: No shareable files found in directory: /data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/Incoming
+ 2026-08-02 09:37:54: Found 0 known shared files
+!2026-08-02 09:37:54: No server list address entry in 'addresses.dat' found. Please paste a valid server list address into this file in order to auto-update your server list
+ 2026-08-02 09:37:54: amuled: OnInit - starting timer
+!2026-08-02 09:37:54: Universal Plug and Play: Internet Gateway Device Detected.
+!2026-08-02 09:37:54: Universal Plug and Play: Successfully subscribed to service urn:schemas-upnp-org:service:WANIPConnection:1, absEventSubURL: http://192.168.100.1:49652/upnp/control/WANIPConn1.
+!2026-08-02 09:37:54: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:37:54:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:37:54:     Key: 0
+!2026-08-02 09:37:54:     Property list:
+!2026-08-02 09:37:54:         PossibleConnectionTypes='IP_Routed'
+!2026-08-02 09:37:54:         ConnectionStatus='Connected'
+!2026-08-02 09:37:54:         ExternalIPAddress='190.104.191.39'
+!2026-08-02 09:37:54:         PortMappingNumberOfEntries='0'
+!2026-08-02 09:37:54: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:37:54:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:37:54:     Key: 1
+!2026-08-02 09:37:54:     Property list:
+!2026-08-02 09:37:54:         PortMappingNumberOfEntries='9'
+!2026-08-02 09:37:54: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:37:54:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:37:54:     Key: 2
+!2026-08-02 09:37:54:     Property list:
+!2026-08-02 09:37:54:         PortMappingNumberOfEntries='10'
+!2026-08-02 09:37:54: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:37:54:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:37:54:     Key: 3
+!2026-08-02 09:37:54:     Property list:
+!2026-08-02 09:37:54:         PortMappingNumberOfEntries='11'
+!2026-08-02 09:37:54: Universal Plug and Play: Internet Gateway Device Detected.
+ 2026-08-02 09:37:54: Asio thread 1 started
+ 2026-08-02 09:37:54: Asio thread 2 started
+ 2026-08-02 09:37:54: Asio thread 4 started
+ 2026-08-02 09:37:54: Loading IP filters 'ipfilter.dat' and 'ipfilter_static.dat'.
+ 2026-08-02 09:37:54: Asio thread 3 started
+ 2026-08-02 09:37:54: Loaded 0 IP-ranges from '/data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/ipfilter.dat'.
+ 2026-08-02 09:37:54: Loaded 0 IP-ranges from '/data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/ipfilter_static.dat'.
+ 2026-08-02 09:37:54: IP filter is ready
+!2026-08-02 09:37:54: Connecting
+ 2026-08-02 09:37:54: Connecting to eMule Sunrise (176.123.5.89 - 176.123.5.89:4725) using protocol obfuscation.
+!2026-08-02 09:37:54: No contacts found, please bootstrap, or download a nodes.dat file.
+!2026-08-02 09:37:54: Kad started.
+!2026-08-02 09:37:54: HTTP download failed for https://api.github.com/repos/amule-org/amule/releases/latest: error setting certificate file: /etc/ssl/certs/ca-certificates.crt
+!2026-08-02 09:37:54: Failed to download the version check file
+ 2026-08-02 09:37:54: Connecting to Poor-eServer-1 (114.88.36.180 - 114.88.36.180:14142) using protocol obfuscation.
+ 2026-08-02 09:37:54: Connected to eMule Sunrise (176.123.5.89:4725)
+ 2026-08-02 09:37:55: eMule Sunrise (176.123.5.89:4725) appears to be full.
+ 2026-08-02 09:37:55: Connecting to Akteon Server No2 (176.125.231.98 - 176.125.231.98:18357) using protocol obfuscation.
+ 2026-08-02 09:37:55: Downloaded http://upd.emule-security.org/nodes.dat (6608 bytes)
+ 2026-08-02 09:37:55: Only 0 Kad contacts available, nodes.dat not written
+ 2026-08-02 09:37:55: Read 152 Kad contacts
+!2026-08-02 09:37:56: Kad stopped.
+!2026-08-02 09:37:56: Connected to Kad (firewalled)
+ 2026-08-02 09:37:57: Downloaded http://upd.emule-security.org/ipfilter.zip (2929277 bytes)
+ 2026-08-02 09:37:57: Successfully updated ipfilter.dat
+ 2026-08-02 09:37:57: Loading IP filters 'ipfilter.dat' and 'ipfilter_static.dat'.
+ 2026-08-02 09:37:57: Loaded 171363 IP-ranges from '/data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/ipfilter.dat'.
+ 2026-08-02 09:37:57: Loaded 0 IP-ranges from '/data/data/com.termux/files/home/Proyectos/aMuTorrent/conf/aMule/ipfilter_static.dat'.
+ 2026-08-02 09:37:57: IP filter is ready
+!2026-08-02 09:38:07: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:38:07:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:38:07:     Key: 4
+!2026-08-02 09:38:07:     Property list:
+!2026-08-02 09:38:07:         PortMappingNumberOfEntries='11'
+!2026-08-02 09:38:07: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:38:07:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:38:07:     Key: 5
+!2026-08-02 09:38:07:     Property list:
+!2026-08-02 09:38:07:         PortMappingNumberOfEntries='11'
+!2026-08-02 09:38:08: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:38:08:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:38:08:     Key: 6
+!2026-08-02 09:38:08:     Property list:
+!2026-08-02 09:38:08:         PortMappingNumberOfEntries='11'
+ 2026-08-02 09:38:20: Connection attempt to Poor-eServer-1 (114.88.36.180:14142) timed out.
+ 2026-08-02 09:38:20: Connecting to Pentium Pilat 2022 (45.142.215.35 - 45.142.215.35:42011) using protocol obfuscation.
+ 2026-08-02 09:38:20: Connection attempt to Pentium Pilat 2022 (45.142.215.35:42011) timed out.
+ 2026-08-02 09:38:20: Connecting to Astra-7 (45.67.231.239 - 45.67.231.239:41237) using protocol obfuscation.
+ 2026-08-02 09:38:21: Connection attempt to Akteon Server No2 (176.125.231.98:18357) timed out.
+ 2026-08-02 09:38:21: Connecting to Poor-eServer-2 (114.88.36.180 - 114.88.36.180:14143) using protocol obfuscation.
+ 2026-08-02 09:38:21: Connection attempt to Poor-eServer-2 (114.88.36.180:14143) timed out.
+ 2026-08-02 09:38:21: Connecting to Astra-4 (45.67.231.239 - 45.67.231.239:39831) using protocol obfuscation.
+!2026-08-02 09:38:24: Connected to Kad (ok)
+!2026-08-02 09:38:28: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:38:28:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:38:28:     Key: 7
+!2026-08-02 09:38:28:     Property list:
+!2026-08-02 09:38:28:         PortMappingNumberOfEntries='11'
+!2026-08-02 09:38:28: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:38:28:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:38:28:     Key: 8
+!2026-08-02 09:38:28:     Property list:
+!2026-08-02 09:38:28:         PortMappingNumberOfEntries='11'
+!2026-08-02 09:38:28: Universal Plug and Play: UPNP_EVENT_RECEIVED:
+!2026-08-02 09:38:28:     SID: uuid:d5f6c1fe-8e55-11f1-b9cb-c4146d2fb4e7
+!2026-08-02 09:38:28:     Key: 9
+!2026-08-02 09:38:28:     Property list:
+!2026-08-02 09:38:28:         PortMappingNumberOfEntries='11'
+ 2026-08-02 09:38:36: Wrote 163 Kad contacts
+!2026-08-02 09:38:36: Disconnected from Kad
+ 2026-08-02 09:38:37: Now, exiting main app...
+ 2026-08-02 09:38:37: aMule OnExit: Terminating core.
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x0000003000615b60 217.198.140.40
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x0000003000615b60 217.198.140.40
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x000000300056b6e0 83.35.45.104
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x000000300056b6e0 83.35.45.104
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x000000300069e3e0 72.65.111.251
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x000000300069e3e0 72.65.111.251
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x00000030006be720 80.253.95.135
+!2026-08-02 09:38:37: Asio Sockets: Destroy() already dying socket 0x0000000000000000 0x00000030006be720 80.253.95.135
+ 2026-08-02 09:38:38: aMule shutdown completed.

@@ -1,0 +1,191 @@
+---
+id: hdturk
+name: HDTurk
+description: "HDTurk is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: tr-TR
+type: private
+encoding: UTF-8
+links:
+  - https://hdturk.club/
+legacylinks:
+  - http://hdturk.de/
+  - https://hdturk.de/
+
+caps:
+  categorymappings:
+    - {id: 231, cat: Movies, desc: "FİLMLER"}
+    - {id: 247, cat: Movies, desc: "FİLMLER - BLURAY"}
+    - {id: 234, cat: Movies, desc: "FİLMLER - NETFLİX"}
+    - {id: 235, cat: Movies, desc: "FİLMLER - AMAZON PRİME"}
+    - {id: 237, cat: Movies, desc: "FİLMLER - DİSNEY+"}
+    - {id: 239, cat: Movies, desc: "FİLMLER - HBOMAX"}
+    - {id: 236, cat: Movies, desc: "FİLMLER - TOD"}
+    - {id: 242, cat: Movies, desc: "FİLMLER - TV+"}
+    - {id: 240, cat: Movies, desc: "FİLMLER - MUBi"}
+    - {id: 243, cat: Movies, desc: "FİLMLER - TİVİBU"}
+    - {id: 238, cat: Movies, desc: "FİLMLER - GAiN"}
+    - {id: 241, cat: Movies, desc: "FİLMLER - TABii"}
+    - {id: 244, cat: Movies, desc: "FİLMLER - APPLE TV"}
+    - {id: 245, cat: Movies, desc: "FİLMLER - GOOGLE PLAY"}
+    - {id: 246, cat: Movies, desc: "FİLMLER - HDTV"}
+    - {id: 248, cat: Movies, desc: "FİLMLER - DİĞER"}
+    - {id: 249, cat: TV, desc: "DİZİLER"}
+    - {id: 250, cat: TV, desc: "DİZİLER - NETFLİX"}
+    - {id: 251, cat: TV, desc: "DİZİLER - AMAZON PRİME"}
+    - {id: 252, cat: TV, desc: "DİZİLER - DİSNEY+"}
+    - {id: 253, cat: TV, desc: "DİZİLER - HBOMAX"}
+    - {id: 254, cat: TV, desc: "DİZİLER - TV+"}
+    - {id: 258, cat: TV, desc: "DİZİLER - TOD"}
+    - {id: 256, cat: TV, desc: "DİZİLER - TABii"}
+    - {id: 255, cat: TV, desc: "DİZİLER - GAiN"}
+    - {id: 261, cat: TV, desc: "DİZİLER - TİVİBU"}
+    - {id: 260, cat: TV, desc: "DİZİLER - HDTV"}
+    - {id: 259, cat: TV, desc: "DİZİLER - BLURAY"}
+    - {id: 257, cat: TV, desc: "DİZİLER - YERLİ DİZİ"}
+    - {id: 269, cat: TV, desc: "DİZİLER - DİĞER"}
+    - {id: 267, cat: PC/Games, desc: "OYUN"}
+    - {id: 268, cat: PC/Games, desc: "OYUN - PC"}
+    - {id: 265, cat: PC/0day, desc: "PROGRAM"}
+    - {id: 266, cat: PC/0day, desc: "PROGRAM - WİNDOWS"}
+    - {id: 262, cat: Audio, desc: "MÜZİK"}
+    - {id: 263, cat: Audio, desc: "MÜZİK - DİSKOGRAFİ"}
+    - {id: 264, cat: Audio, desc: "MÜZİK - ALBÜM"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: csrf_token
+    type: text
+    label: CSRF Token
+  - name: info_token
+    type: info
+    label: About your CSRF Token
+    default: "<ol><li>From the same place you fetched the cookie,</li><li>Select the <b>Elements</b> tab (Chrome Browser) or <b>Inspector</b> tab (FireFox)</li><li>Press <b>Ctrl+F</b> to search the HTML</li><li>Search for <i>csrf-token</i> and find the first result</li><li><b>Copy</b> the value of the <i>content</i> attribute and <b>Paste</b> here.</li></ol>"
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  # using the cookie method as the CSRF token is tied to that session
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: form[action$="/logout"]
+
+download:
+  before:
+    path: "{{ .DownloadUri.AbsoluteUri }}/thanks"
+    method: post
+  selectors:
+    - selector: a[href$="/download"]
+      attribute: href
+
+search:
+  paths:
+    - path: torrents
+  inputs:
+    do: search
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    cats: "{{ range .Categories }}{{.}},{{end}}"
+    # t_both, t_name, t_description, t_uploader, t_genre
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    f_sort: "{{ .Config.sort }}"
+    f_order: "{{ .Config.type }}"
+
+  headers:
+    x-csrf-token: ["{{ .Config.csrf_token }}"]
+
+  rows:
+    selector: div#torrent-list > div
+
+  fields:
+    title:
+      selector: a[href*="/torrents/"]
+    details:
+      selector: a[href*="/torrents/"]
+      attribute: href
+    category:
+      selector: a[href*="torrents?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    poster:
+      selector: span.hidden img
+      attribute: src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date:
+      selector: span[title="Zaman"]
+      filters:
+        - name: replace
+          args: ["dk", "minutes"]
+        - name: replace
+          args: ["h", "weeks"]
+        - name: replace
+          args: ["sa", "hours"]
+        - name: replace
+          args: ["ay", "months"]
+        - name: replace
+          args: ["y", "years"]
+        - name: replace
+          args: ["g", "days"]
+        - name: append
+          args: " ago"
+        - name: timeago
+    download:
+      selector: a[href*="/torrents/"]
+      attribute: href
+    size:
+      selector: span[title="Boyut"]
+    grabs:
+      selector: span[title="Tamamlanma (snatch)"]
+    seeders:
+      selector: span[title="Gönderen"]
+    leechers:
+      selector: span[title="İndiren"]
+    downloadvolumefactor:
+      case:
+        img[src$="/freedownload.gif"]: 0
+        img[src$="/silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="/x2.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 140 hours (as seconds = 140 x 60 x 60)
+      text: 504000
+# TS Special Edition v.7.5

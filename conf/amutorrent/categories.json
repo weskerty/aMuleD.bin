@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "categories": {
+    "Default": {
+      "color": "#CCCCCC",
+      "path": null,
+      "pathMappings": null,
+      "comment": "",
+      "priority": 0,
+      "amuleIds": {},
+      "createdAt": "2026-08-02T08:02:43.146Z",
+      "updatedAt": "2026-08-02T08:02:43.146Z"
+    }
+  }
+}

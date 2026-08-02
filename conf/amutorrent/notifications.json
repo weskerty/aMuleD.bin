@@ -1,0 +1,13 @@
+{
+  "enabled": false,
+  "events": {
+    "downloadAdded": true,
+    "downloadFinished": true,
+    "categoryChanged": false,
+    "fileMoved": true,
+    "fileDeleted": true,
+    "clientUnavailable": true,
+    "clientAvailable": true
+  },
+  "services": []
+}

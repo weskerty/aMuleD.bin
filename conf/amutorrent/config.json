@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "firstRunCompleted": true,
+  "lastSeenVersion": "3.8.8",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 4000,
+    "auth": {
+      "enabled": true,
+      "password": "1234567890-p",
+      "sessionSecret": "75e020430984ebf3105f4de4f8c4c3550eeb00a021901a35136677c45e813068",
+      "adminUsername": "",
+      "trustedProxy": {
+        "enabled": false,
+        "usernameHeader": "",
+        "autoProvision": false,
+        "trustedProxyIPs": []
+      }
+    }
+  },
+  "clients": [
+    {
+      "id": "transmission-127.0.0.1-9091",
+      "type": "transmission",
+      "name": "Transmission",
+      "color": null,
+      "enabled": true,
+      "host": "127.0.0.1",
+      "port": 9091,
+      "path": "/transmission/rpc",
+      "username": "admin",
+      "password": "1234567890-p",
+      "useSsl": false
+    }
+  ],
+  "directories": {
+    "data": "server/data",
+    "logs": "server/logs",
+    "geoip": "server/data/geoip"
+  },
+  "integrations": {
+    "amuleInstanceId": null,
+    "sonarr": {
+      "enabled": false,
+      "url": "",
+      "apiKey": "",
+      "searchIntervalHours": 6
+    },
+    "radarr": {
+      "enabled": false,
+      "url": "",
+      "apiKey": "",
+      "searchIntervalHours": 6
+    },
+    "prowlarr": {
+      "enabled": true,
+      "url": "http://localhost:9696/",
+      "apiKey": "c0aad96208164dbe8e1de37b5112e085"
+    }
+  },
+  "history": {
+    "enabled": true,
+    "retentionDays": 30
+  },
+  "eventScripting": {
+    "enabled": false,
+    "scriptPath": "scripts/custom.sh",
+    "events": {
+      "downloadAdded": true,
+      "downloadFinished": true,
+      "categoryChanged": true,
+      "fileMoved": true,
+      "fileDeleted": true
+    },
+    "timeout": 30000
+  }
+}
