@@ -1,17 +1,26 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-echo "Solicitando permisos"
+echo -e "\e[1;36m┌─────────────────────────────────┐\e[0m"
+echo -e "\e[1;36m│ \e[1;32m🚀 aMuTorrent Installer \e[1;36m│\e[0m"
+echo -e "\e[1;36m└─────────────────────────────────┘\e[0m"
+echo -e "\e[1;33m⚠️ ACEPTA LOS PERMISOS CUANDO APAREZCAN | ACCEPT PERMISSIONS WHEN THEY APPEAR \e[0m"
+echo -e "\e[1;33m⚠️ CONCEDE PERMISOS DE ALMACENAMIENTO Y EJECUCION | GRANT STORAGE AND EXECUTION PERMISSIONS \e[0m"
+sleep 5
+echo -e "\e[1;32m🔧 Solicitando Permisos... | Requesting Permissions...\e[0m"
+sleep 2
+printf 'y\y' | termux-setup-storage
+sleep 10
 termux-wake-lock
-printf 'y\n' | termux-setup-storage
-sleep 3
+apt-get update 
+pkg install -y tur-repo x11-repo
+apt-get update
 
-echo "Agregando repos"
 pkg install -y tur-repo x11-repo
 
 echo "Actualizando paquetes"
 apt update -y
 yes | apt upgrade
-pkg install -y git proot-distro wget nodejs-lts clang lld libc++
+pkg install -y git jq proot-distro wget nodejs-lts clang lld libc++
 pkg install -y prowlarr
 pkg install -y transmission
 pkg install -y sonarr
