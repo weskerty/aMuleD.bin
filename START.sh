@@ -8,6 +8,7 @@ pkill runsv 2>/dev/null
 pkill runsvdir 2>/dev/null
 pkill -f transmission-daemon 2>/dev/null
 pkill -f Prowlarr.dll 2>/dev/null
+pkill -f Prowlarr 2>/dev/null
 pkill -f Sonarr 2>/dev/null
 pkill -f Radarr 2>/dev/null
 pkill -f amuled 2>/dev/null
