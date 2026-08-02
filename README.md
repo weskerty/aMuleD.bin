@@ -88,9 +88,9 @@ Para esto debes activar el Reenvio de Puertos en tu Router y ademas recomendaria
 # No Funciona?
 En nuevas versiones de Android (A12 y Superior) el sistema no permite que Termux se mantenga vivo en segundo plano
 Para solucionar esto Necesitas Hacer unos pasos extra para Corregir.
-1- Ajustes de tu Telefono > Bateria > Prioridad a Termux en Todo, Inicio automatico, de fondo, etc.
-2- Activar Depuracion USB (ADB) en Ajustes de Desarrollador de Android [Como? ↗️](https://transmissionbt.com/)
-3- Luego ve a [ADB Tools ↗️](https://cheagana.com/#web/otros/Archivos/Dinamico/%F0%9F%A7%A9%20Apps/%F0%9F%92%9A%20Android/Gestor%20Android%20-%20Apps&+.md) desde otro Dispositivo, Conecta el Dispositivo a Parchear por USB y luego Presiona el boton "Conectar", selecciona el dispositivo conectado, luego en el telefono aparecera "Permitir este Ordenador?" reponde SI, Luego en la Web presionas el boton "Comandos" y luego "Termux Alive" y listo, ya estaria.
+- Ajustes de tu Telefono > Bateria > Prioridad a Termux en Todo, Inicio automatico, de fondo, etc.
+- Activar Depuracion USB (ADB) en Ajustes de Desarrollador de Android [Como? ↗️](https://transmissionbt.com/)
+- Luego ve a [ADB Tools ↗️](https://cheagana.com/#web/otros/Archivos/Dinamico/%F0%9F%A7%A9%20Apps/%F0%9F%92%9A%20Android/Gestor%20Android%20-%20Apps&+.md) desde otro Dispositivo, Conecta el Dispositivo a Parchear por USB y luego Presiona el boton "Conectar", selecciona el dispositivo conectado, luego en el telefono aparecera "Permitir este Ordenador?" reponde SI, Luego en la Web presionas el boton "Comandos" y luego "Termux Alive" y listo, ya estaria.
 
 
 
