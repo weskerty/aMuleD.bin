@@ -2,6 +2,19 @@
 
 BASE="$(cd "$(dirname "$0")" && pwd)"
 
+echo "Deteniendo procesos previos"
+sv-disable prowlarr transmission sonarr radarr 2>/dev/null
+pkill runsv 2>/dev/null
+pkill runsvdir 2>/dev/null
+pkill -f transmission-daemon 2>/dev/null
+pkill -f Prowlarr.dll 2>/dev/null
+pkill -f Sonarr 2>/dev/null
+pkill -f Radarr 2>/dev/null
+pkill -f amuled 2>/dev/null
+pkill -f "node server/server.js" 2>/dev/null
+pkill -f proot 2>/dev/null
+sleep 2
+
 termux-wake-lock
 
 echo "Actualizando aMuTorrent"
