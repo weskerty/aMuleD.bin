@@ -49,7 +49,7 @@ Apareceran Preguntas de "Permitir Acceder a Todos los Archivos" y "Permitir Ejec
 
 Luego de un rato el Servicio estara listo, veras un mensaje "Inicia en el Navegador"
 
-Entra a [http://localhost:4000 ↗️](http://localhost:4000)  para controlar.
+Entra a [http://localhost:4000 ↗️](http://localhost:4000)  para controlar. Las descargas apareceran en Downloads/aMuTorrent/
 
 ## Usuario: 
 ```
@@ -70,6 +70,8 @@ Hay diversas formas de almacenamiento
 - Enlace Simbolico a Disco Duro OTG (o varios con mergerfs. no funciona en termux falta modificar su fuse.)
 - SFTP con otras maquinas
 - NFS con otras maquinas (NFS paquete requiere root)
+
+El Instalador crea el enlace simbolico Downloads/aMuTorrent/
 
 # Termux Google Play Store
 <img width="1000" height="266" alt="zzzgoogle" src="https://github.com/user-attachments/assets/abf89ae6-bf50-43de-b20a-c257a5d1f19e" />
