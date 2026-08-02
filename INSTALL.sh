@@ -1,5 +1,4 @@
 #!/data/data/com.termux/files/usr/bin/bash
-set -e
 
 echo "Solicitando permisos"
 termux-wake-lock
