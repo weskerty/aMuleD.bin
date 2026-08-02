@@ -82,6 +82,9 @@ Hay diversas formas de almacenamiento
 
 La version que encuentras en PlayStore no funciona bien, el servicio se ejecutara, pero no funcionara: [Radarr ↗️](https://radarr.video/), [Sonarr ↗️](https://sonarr.tv/) ni [Prowlarr ↗️](https://prowlarr.com/docs/api/) solo funcionara la  [Busqueda aMule ↗️](https://amule-org.github.io/docs) y descargas directas de [Transmission ↗️](https://transmissionbt.com/)
 
+# Acceder fuera de la red Local
+Para esto debes activar el Reenvio de Puertos en tu Router y ademas recomendaria cambiar la contraseña del gestor, tambien de los demas servicios que usa mencionados anteriormente, ya que todos tienen la misma contraseña.
+
 # No Funciona?
 En nuevas versiones de Android (A12 y Superior) el sistema no permite que Termux se mantenga vivo en segundo plano
 Para solucionar esto Necesitas Hacer unos pasos extra para Corregir.
