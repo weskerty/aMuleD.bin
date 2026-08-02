@@ -16,10 +16,9 @@ Suite P2P en tu Bolsillo
   
 # Consumo Minimo de Recursos
 
-
 <table>
   <tr>
-    <td><img width="400" src="https://github.com/user-attachments/assets/40d1ae31-95b8-4fe7-8a7c-2f592d009f2e"></td>
+    <td><img width="400" src="https://github.com/user-attachments/assets/87f61c2a-8327-4ecc-885b-8310efce5a91"></td>
     <td><img width="400" src="https://github.com/user-attachments/assets/c0b6cbb6-c079-452b-a630-544151c69123"></td>
   </tr>
   <tr>
