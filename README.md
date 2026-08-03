@@ -70,9 +70,9 @@ Para ajustar [Radarr ↗️](https://radarr.video/), [Sonarr ↗️](https://son
 ### Almacenamiento Externo - Discos Duros USB OTG
 Hay diversas formas de almacenamiento
 - Enlace Simbolico a MicroSD (Muchos telefonos soportan hasta 2TB en SD)
-- Enlace Simbolico a Disco Duro OTG (o varios con mergerfs. no funciona en termux falta modificar su fuse.)
+- Enlace Simbolico a Disco Duro OTG (dependiendo de la rom, muchos no hacen dormir el disco duro al dejar de usar, requieres root para configurar.)
 - SFTP con otras maquinas
-- NFS con otras maquinas (NFS paquete requiere root)
+- NFS con otras maquinas (requiere root)
 
 
 
@@ -80,10 +80,20 @@ Hay diversas formas de almacenamiento
 <img width="1000" height="266" alt="zzzgoogle" src="https://github.com/user-attachments/assets/abf89ae6-bf50-43de-b20a-c257a5d1f19e" />
 
 
-La version que encuentras en PlayStore no funciona bien, el servicio se ejecutara, pero no funcionara: [Radarr ↗️](https://radarr.video/), [Sonarr ↗️](https://sonarr.tv/) ni [Prowlarr ↗️](https://prowlarr.com/docs/api/) solo funcionara la  [Busqueda aMule ↗️](https://amule-org.github.io/docs) y descargas directas de [Transmission ↗️](https://transmissionbt.com/)
+La version que encuentras en PlayStore no funciona bien, el servicio se ejecutara, pero no funcionara: [Radarr](https://radarr.video/), [Sonarr](https://sonarr.tv/) ni [Prowlarr](https://prowlarr.com/docs/api/) solo funcionara la  [Busqueda aMule](https://amule-org.github.io/docs) y descargas directas de [Transmission](https://transmissionbt.com/)
 
 # Acceder fuera de la red Local
 Para esto debes activar el Reenvio de Puertos en tu Router y ademas recomendaria cambiar la contraseña del gestor, tambien de los demas servicios que usa mencionados anteriormente, ya que todos tienen la misma contraseña.
+
+# Auto Iniciar - Volver a Abrir
+Volver a Iniciar:
+Entrar a Termux y Pegar:
+```
+cd aMuTorrent/repo && node server/server.js
+
+```
+
+Se puede automatizar el inicio con TermuxBoot/Tasker y un .bashrc que autoinicie el comando de Arriba.
 
 # No Funciona?
 En nuevas versiones de Android (A12 y Superior) el sistema no permite que Termux se mantenga vivo en segundo plano
