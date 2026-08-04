@@ -9,3 +9,4 @@ verificar RAM disponible, si es menor a 500MB entonces no se ejecuta Sonarr ni R
 INSTALL.sh
 instalar zsh y ohmyzsh si es que no se encuentran.
 añadir alias para facil inicio= tamu > bash START.sh
+borrar inicio de sonarr etc de services termux.

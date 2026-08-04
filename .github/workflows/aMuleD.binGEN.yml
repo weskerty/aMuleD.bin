@@ -1,13 +1,7 @@
-name: Build aMuleD (static)
+name: Build amuled (static)
 
 on:
   workflow_dispatch:
-    inputs:
-      force_rebuild:
-        description: 'aMuleD'
-        required: false
-        type: boolean
-        default: false
   schedule:
     - cron: '0 0 1 1,7 *'
 
@@ -28,13 +22,16 @@ jobs:
             runner: ubuntu-24.04
             needs_qemu: true
             output_path: conf/aMule/aMuleDARMv7.bin
-            state_path: conf/aMule/.aMuleDARMv7.upstream-commit
           - arch: arm64
             platform: linux/arm64
             runner: ubuntu-24.04-arm
             needs_qemu: false
             output_path: conf/aMule/aMuleDARM64.bin
-            state_path: conf/aMule/.aMuleDARM64.upstream-commit
+          - arch: x86_64
+            platform: linux/amd64
+            runner: ubuntu-24.04
+            needs_qemu: false
+            output_path: conf/aMule/aMuleDx86_64.bin
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout this repo
@@ -51,32 +48,16 @@ jobs:
           cd amule-src
           echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Check if a rebuild is needed
-        id: check
-        run: |
-          PREV=""
-          if [ -f "${{ matrix.state_path }}" ]; then
-            PREV="$(cat "${{ matrix.state_path }}")"
-          fi
-          CUR="${{ steps.upstream.outputs.sha }}"
-          if [ "${PREV}" = "${CUR}" ] && [ "${{ inputs.force_rebuild }}" != "true" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Set up QEMU
-        if: steps.check.outputs.skip != 'true' && matrix.needs_qemu
+        if: matrix.needs_qemu
         uses: docker/setup-qemu-action@v3
         with:
           platforms: arm
 
       - name: Set up Docker Buildx
-        if: steps.check.outputs.skip != 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Restore Docker layer cache
-        if: steps.check.outputs.skip != 'true'
         uses: actions/cache@v4
         with:
           path: /tmp/buildx-cache
@@ -86,7 +67,6 @@ jobs:
             buildx-${{ matrix.arch }}-static-
 
       - name: Load pinned dependency versions
-        if: steps.check.outputs.skip != 'true'
         id: versions
         run: |
           set -a
@@ -104,7 +84,6 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Build static amuled
-        if: steps.check.outputs.skip != 'true'
         run: |
           mkdir -p out /tmp/buildx-cache
           docker buildx build \
@@ -127,27 +106,22 @@ jobs:
           mv /tmp/buildx-cache-new /tmp/buildx-cache
 
       - name: Verify the binary
-        if: steps.check.outputs.skip != 'true'
         run: |
           file out/amuled
-          file out/amuled | grep -qi 'ARM' || { echo "::error::not an ARM binary"; exit 1; }
           file out/amuled | grep -qi 'statically linked' \
             || echo "::warning::'file' didn't report static linkage — verify manually if unsure."
 
       - name: Install into repo path
-        if: steps.check.outputs.skip != 'true'
         run: |
           mkdir -p "$(dirname "${{ matrix.output_path }}")"
           cp out/amuled "${{ matrix.output_path }}"
           chmod +x "${{ matrix.output_path }}"
-          echo "${{ steps.upstream.outputs.sha }}" > "${{ matrix.state_path }}"
 
       - name: Commit and push
-        if: steps.check.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f "${{ matrix.output_path }}" "${{ matrix.state_path }}"
+          git add -f "${{ matrix.output_path }}"
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
