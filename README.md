@@ -1,4 +1,4 @@
-<h1> </h1>
+<h3> </h3>
 <div style="text-align:center;"
 <p align="center">
 <img src="https://github.com/user-attachments/assets/2c2d84b9-127e-4257-a5e4-cac54c557944" alt="Muly" width="170">
@@ -12,6 +12,8 @@ P2P Suite in Your Pocket
       <td><img width="400" src="https://raw.githubusercontent.com/got3nks/amutorrent/main/docs/screenshots/history-mobile.png" /></td>
     </tr>
   </table>
+
+</br>
 
 # Minimal Resource Consumption
 
@@ -34,10 +36,18 @@ Power consumption is Minimal, less than a light bulb. Even lower without a hard 
 
 ### Android
 
-Download and Install Termux from here: [Termux Repo ↗️](https://github.com/termux/termux-app/releases)
+Download and Install Termux from here: 
 
-Then open Termux and paste this:
+<!--
+<a href="https://github.com/termux/termux-app/releases/download/v0.119.0-beta.3/termux-app_v0.119.0-beta.3+apt-android-7-github-debug_universal.apk">
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=plastic&logo=android&logoColor=white" alt="Descargar Termux" width="90">
+</a>
+-->
 
+[Android 7 and higher ↗️](https://github.com/termux/termux-app/releases/download/v0.119.0-beta.3/termux-app_v0.119.0-beta.3+apt-android-7-github-debug_universal.apk) or [For Android 5&6 Here ↗️](https://github.com/termux/termux-app/releases/download/v0.119.0-beta.3/termux-app_v0.119.0-beta.3+apt-android-5-github-debug_universal.apk)
+
+
+### Once installed, paste this into Termux:
 ```
 curl -fsSL https://raw.githubusercontent.com/weskerty/aMuleD.bin/refs/heads/master/INSTALL.sh | bash
 ```
@@ -96,7 +106,7 @@ cd aMuTorrent/repo && node server/server.js
 Startup can be automated with TermuxBoot/Tasker and a .bashrc or sv that automatically starts the command above
 
 > [!IMPORTANT]
-> # Not Working?
+> ## Not Working?
 
 In newer Android versions (A12 and above), the system does not allow Termux to stay alive in the background.
 
@@ -108,7 +118,7 @@ To solve this, you need to perform some extra steps to fix it.
 
 
 > [!TIP]
-> Helpful 
+> ## Helpful 
 
 ### Battery
 Set the battery charging limit to 70% or lower. This prevents the battery from swelling. Some phones have this option in their battery settings; those that don't can adjust it with root access.
@@ -116,11 +126,11 @@ Set the battery charging limit to 70% or lower. This prevents the battery from s
 Or you can also make a direct connection [Tutorial ↗️](https://blog.kedio.co/post/how-to-run-a-oneplus-6t-without-battery/)
 
 #### Optional Accessories
-[USB OTG + Charging ↗️]()
+[USB OTG + Charging ↗️](https://www.aliexpress.us/item/3256807082682341.html?gatewayAdapt=glo2usa)
 
-[USB HUB More Power Supply ↗️]()
+[USB HUB More Power Supply ↗️](https://www.aliexpress.us/w/wholesale-usb-hub-powered.html?spm=a2g0o.productlist.search.0)
 
-[SATA to USB ↗️]()
+[SATA to USB ↗️](https://www.aliexpress.us/w/wholesale-sata-to-usb.html?spm=a2g0o.detail.search.0)
 
 # Extra
 If you found this interesting, then you'll also be interested in other Termux projects like bots for WhatsApp, Telegram, Discord, etc. You can see a list here: [Repo TermuxGod  ↗️](https://github.com/weskerty/TermuxGod)
