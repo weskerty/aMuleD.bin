@@ -32,6 +32,13 @@ Power consumption is Minimal, less than a light bulb. Even lower without a hard 
 
 </div>
 
+<details> <summary> 🛂 Explanation - What does this do?</summary>
+The system uses Transmission for torrents and eMule (KAD&ED2K P2P), watch-dir set to PhoneStorage/Downloads/aMuTorrent. All files in this path will be seeded. From the WebUI you can search, download and view all the information about torrents. 
+
+</details>
+
+
+
 ## Installation
 
 ### Android
