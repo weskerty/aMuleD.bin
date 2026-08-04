@@ -1,12 +1,10 @@
-
-
-name: Build amuled armv7 (static)
+name: Build aMuleD (static)
 
 on:
   workflow_dispatch:
     inputs:
       force_rebuild:
-        description: 'armv7'
+        description: 'aMuleD'
         required: false
         type: boolean
         default: false
@@ -18,19 +16,33 @@ permissions:
 
 env:
   UPSTREAM_REPO: https://github.com/amule-org/amule.git
-  OUTPUT_PATH: conf/aMule/aMuleDARMv7.AppImage
-  STATE_PATH: conf/aMule/.aMuleDARMv7.upstream-commit
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: armv7
+            platform: linux/arm/v7
+            runner: ubuntu-24.04
+            needs_qemu: true
+            output_path: conf/aMule/aMuleDARMv7.bin
+            state_path: conf/aMule/.aMuleDARMv7.upstream-commit
+          - arch: arm64
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            needs_qemu: false
+            output_path: conf/aMule/aMuleDARM64.bin
+            state_path: conf/aMule/.aMuleDARM64.upstream-commit
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Clone amule-org/amule (upstream source)
+      - name: Clone amule-org/amule
         run: git clone --depth=1 "${{ env.UPSTREAM_REPO }}" amule-src
 
       - name: Resolve upstream commit
@@ -43,21 +55,18 @@ jobs:
         id: check
         run: |
           PREV=""
-          if [ -f "${{ env.STATE_PATH }}" ]; then
-            PREV="$(cat "${{ env.STATE_PATH }}")"
+          if [ -f "${{ matrix.state_path }}" ]; then
+            PREV="$(cat "${{ matrix.state_path }}")"
           fi
           CUR="${{ steps.upstream.outputs.sha }}"
-          echo "Previous built commit: ${PREV:-<none>}"
-          echo "Current upstream commit: ${CUR}"
           if [ "${PREV}" = "${CUR}" ] && [ "${{ inputs.force_rebuild }}" != "true" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "Upstream unchanged and force_rebuild not set — skipping."
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Set up QEMU (for linux/arm/v7 emulation)
-        if: steps.check.outputs.skip != 'true'
+      - name: Set up QEMU
+        if: steps.check.outputs.skip != 'true' && matrix.needs_qemu
         uses: docker/setup-qemu-action@v3
         with:
           platforms: arm
@@ -66,11 +75,20 @@ jobs:
         if: steps.check.outputs.skip != 'true'
         uses: docker/setup-buildx-action@v3
 
-      - name: Load pinned dependency versions from upstream
+      - name: Restore Docker layer cache
+        if: steps.check.outputs.skip != 'true'
+        uses: actions/cache@v4
+        with:
+          path: /tmp/buildx-cache
+          key: buildx-${{ matrix.arch }}-static-${{ hashFiles('amule-src/packaging/linux/versions.env') }}-${{ github.run_id }}
+          restore-keys: |
+            buildx-${{ matrix.arch }}-static-${{ hashFiles('amule-src/packaging/linux/versions.env') }}-
+            buildx-${{ matrix.arch }}-static-
+
+      - name: Load pinned dependency versions
         if: steps.check.outputs.skip != 'true'
         id: versions
         run: |
-
           set -a
           . amule-src/packaging/linux/versions.env
           set +a
@@ -85,12 +103,12 @@ jobs:
             echo "libupnp_sha256=${LIBUPNP_SHA256}"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Build static amuled for armv7 (musl, via buildx)
+      - name: Build static amuled
         if: steps.check.outputs.skip != 'true'
         run: |
-          mkdir -p out
+          mkdir -p out /tmp/buildx-cache
           docker buildx build \
-            --platform linux/arm/v7 \
+            --platform ${{ matrix.platform }} \
             -f amule-src/packaging/linux/static/Dockerfile \
             --build-arg "ALPINE_STATIC_BASE=${{ steps.versions.outputs.alpine_static_base }}" \
             --build-arg "WX_VERSION=${{ steps.versions.outputs.wx_version }}" \
@@ -100,37 +118,42 @@ jobs:
             --build-arg "LIBUPNP_VERSION=${{ steps.versions.outputs.libupnp_version }}" \
             --build-arg "LIBUPNP_TARBALL_URL=${{ steps.versions.outputs.libupnp_tarball_url }}" \
             --build-arg "LIBUPNP_SHA256=${{ steps.versions.outputs.libupnp_sha256 }}" \
+            --cache-from "type=local,src=/tmp/buildx-cache" \
+            --cache-to "type=local,dest=/tmp/buildx-cache-new,mode=max" \
             --output "type=local,dest=out" \
             amule-src
-
           test -f out/amuled
+          rm -rf /tmp/buildx-cache
+          mv /tmp/buildx-cache-new /tmp/buildx-cache
 
-      - name: Verify the binary is static armv7
+      - name: Verify the binary
         if: steps.check.outputs.skip != 'true'
         run: |
           file out/amuled
           file out/amuled | grep -qi 'ARM' || { echo "::error::not an ARM binary"; exit 1; }
-
           file out/amuled | grep -qi 'statically linked' \
             || echo "::warning::'file' didn't report static linkage — verify manually if unsure."
 
       - name: Install into repo path
         if: steps.check.outputs.skip != 'true'
         run: |
-          mkdir -p "$(dirname "${{ env.OUTPUT_PATH }}")"
-          cp out/amuled "${{ env.OUTPUT_PATH }}"
-          chmod +x "${{ env.OUTPUT_PATH }}"
-          echo "${{ steps.upstream.outputs.sha }}" > "${{ env.STATE_PATH }}"
+          mkdir -p "$(dirname "${{ matrix.output_path }}")"
+          cp out/amuled "${{ matrix.output_path }}"
+          chmod +x "${{ matrix.output_path }}"
+          echo "${{ steps.upstream.outputs.sha }}" > "${{ matrix.state_path }}"
 
       - name: Commit and push
         if: steps.check.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "${{ env.OUTPUT_PATH }}" "${{ env.STATE_PATH }}"
+          git add -f "${{ matrix.output_path }}" "${{ matrix.state_path }}"
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update aMuleDARMv7 (amule-org/amule@${{ steps.upstream.outputs.sha }})"
-            git push
+            git commit -m "Update aMuleD ${{ matrix.arch }} (amule-org/amule@${{ steps.upstream.outputs.sha }})"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin "${GITHUB_REF_NAME}" && git push && break
+              sleep $((RANDOM % 10 + 1))
+            done
           fi
