@@ -22,11 +22,13 @@ sleep 1
 clear
 printf "\033[31m%s\033[0m \033[33m%s\033[0m\n" "$T1" "$T"
 
+termux-wake-lock
+sleep 5
 
-sleep 2
 printf 'y\y' | termux-setup-storage
 sleep 10
-termux-wake-lock
+
+
 pkg update 
 pkg install -y tur-repo x11-repo
 pkg update
@@ -74,6 +76,5 @@ ln -s ../../conf/amutorrent/geoip geoip
 cd ~/aMuTorrent
 
 chmod +x START.sh
-chmod +x bin/aMule/aMuleDARM64.bin bin/aMule/aMuleDARMv7.bin
 
 ./START.sh

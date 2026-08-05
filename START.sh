@@ -59,7 +59,7 @@ if [ "$HASH_ANTES" != "$HASH_DESPUES" ] || [ ! -d "$BASE/repo/server/node_module
   npm install
   npm run build
 else
-  echo "Sin cambios en el repo, se omite compilacion"
+  echo "Sin "
 fi
 
 echo "Actualizando actualizadores "
