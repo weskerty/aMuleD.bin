@@ -1,4 +1,4 @@
-name: Build amuled (static)
+name: Build aMuleD Static
 
 on:
   workflow_dispatch:
@@ -21,17 +21,17 @@ jobs:
             platform: linux/arm/v7
             runner: ubuntu-24.04
             needs_qemu: true
-            output_path: conf/aMule/aMuleDARMv7.bin
+            output_path: bin/aMule/aMuleDARMv7.bin
           - arch: arm64
             platform: linux/arm64
             runner: ubuntu-24.04-arm
             needs_qemu: false
-            output_path: conf/aMule/aMuleDARM64.bin
+            output_path: bin/aMule/aMuleDARM64.bin
           - arch: x86_64
             platform: linux/amd64
             runner: ubuntu-24.04
             needs_qemu: false
-            output_path: conf/aMule/aMuleDx86_64.bin
+            output_path: bin/aMule/aMuleDx86_64.bin
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout this repo
