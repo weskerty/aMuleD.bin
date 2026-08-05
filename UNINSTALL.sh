@@ -26,6 +26,7 @@ pkill -f Radarr 2>/dev/null
 pkill -f aMuleDARM64.bin 2>/dev/null
 pkill -f aMuleDARMv7.bin 2>/dev/null
 pkill -f "node server/server.js" 2>/dev/null
+pkill -f proot 2>/dev/null
 sleep 2
 
 echo "Borrando carpeta $BASE"
@@ -33,5 +34,6 @@ rm -rf "$BASE"
 
 echo "Desinstalando programas"
 pkg uninstall -y prowlarr transmission sonarr radarr
+#proot-distro remove debian
 
 echo "Desinstalacion completa :l"
