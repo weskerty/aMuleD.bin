@@ -50,8 +50,8 @@ pkg install -y transmission
 pkg install -y sonarr
 pkg install -y radarr
 pkg install -y proot-distro
-pkg install -y caddy &
-proot-distro install debian &
+pkg install -y caddy 
+proot-distro install debian 
 
 
 echo "Configurando node-gyp vacio"
