@@ -54,7 +54,11 @@ Download and Install Termux from here:
 </a>
 -->
 
-[Android 7 and higher ↗️](https://github.com/termux/termux-app/releases/download/v0.119.0-beta.3/termux-app_v0.119.0-beta.3+apt-android-7-github-debug_universal.apk) or [For Android 5&6 Here ↗️](https://github.com/termux/termux-app/releases/download/v0.119.0-beta.3/termux-app_v0.119.0-beta.3+apt-android-5-github-debug_universal.apk)
+[Android 7 and higher ↗️](https://github.com/termux/termux-app/releases/download/v0.119.0-beta.3/termux-app_v0.119.0-beta.3+apt-android-7-github-debug_universal.apk) 
+
+or
+
+[For Android 5&6 Here ↗️](https://github.com/termux/termux-app/releases/download/v0.119.0-beta.3/termux-app_v0.119.0-beta.3+apt-android-5-github-debug_universal.apk)
 
 
 ### Once installed, paste this into Termux:
