@@ -114,7 +114,7 @@ Restarting:
 Enter Termux and paste:
 
 ```
-cd aMuTorrent/repo && node server/server.js
+cd aMuTorrent && bash START.sh
 ```
 
 Startup can be automated with TermuxBoot/Tasker and a .bashrc or sv that automatically starts the command above
