@@ -14,6 +14,7 @@ pkill -f Radarr 2>/dev/null
 pkill -f aMuleDARM64.bin 2>/dev/null
 pkill -f aMuleDARMv7.bin 2>/dev/null
 pkill -f "node server/server.js" 2>/dev/null
+pkill -f proot 2>/dev/null
 sleep 2
 
 termux-wake-lock
@@ -86,8 +87,7 @@ if [ "$SKIP_ARR" -eq 0 ]; then
 fi
 
 echo "Iniciando aMule"
-chmod +x "$BASE/bin/aMule/$AMULE_BIN"
-nohup "$BASE/bin/aMule/$AMULE_BIN" --config-dir="$BASE/conf/aMule" > "$BASE/conf/amule.log" 2>&1 &
+nohup proot-distro login debian -- bash -c "cd '$BASE/bin/aMule' && chmod +x $AMULE_BIN && ./$AMULE_BIN --config-dir='$BASE/conf/aMule'" > "$BASE/conf/amule.log" 2>&1 &
 
 
 (sleep 20s && /data/data/com.termux/files/usr/bin/termux-open "localhost:4000") &>/dev/null &

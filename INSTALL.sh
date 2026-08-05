@@ -25,7 +25,7 @@ printf "\033[31m%s\033[0m \033[33m%s\033[0m\n" "$T1" "$T"
 termux-wake-lock
 sleep 5
 
-printf 'y\y' | termux-setup-storage
+printf 'y\y' | termux-setup-storage 2>&1 &
 sleep 10
 
 
@@ -44,12 +44,15 @@ pkg update -y
 yes | apt upgrade
 pkg install -y git jq wget nodejs-lts 
 pkg install -y clang lld libc++ 
-pkg install -y python3
+pkg install -y python
 pkg install -y prowlarr
 pkg install -y transmission
 pkg install -y sonarr
 pkg install -y radarr
-pkg install -y caddy
+pkg install -y proot-distro
+pkg install -y caddy &
+proot-distro install debian &
+
 
 echo "Configurando node-gyp vacio"
 mkdir -p ~/.gyp
