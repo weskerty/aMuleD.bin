@@ -40,7 +40,9 @@ pkg update
 echo "Actualizando paquetes"
 pkg update -y
 yes | apt upgrade
-pkg install -y git jq wget nodejs-lts clang lld libc++
+pkg install -y git jq wget nodejs-lts 
+pkg install -y clang lld libc++ 
+pkg install -y python3
 pkg install -y prowlarr
 pkg install -y transmission
 pkg install -y sonarr
@@ -72,6 +74,6 @@ ln -s ../../conf/amutorrent/geoip geoip
 cd ~/aMuTorrent
 
 chmod +x START.sh
-chmod +x aMuTorrent/bin/aMule/aMuleDARM64.bin aMuTorrent/bin/aMule/aMuleDARMv7.bin
+chmod +x bin/aMule/aMuleDARM64.bin bin/aMule/aMuleDARMv7.bin
 
 ./START.sh
