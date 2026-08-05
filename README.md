@@ -1,7 +1,8 @@
 <h3> </h3>
 <div style="text-align:center;"
 <p align="center">
-<img src="https://github.com/user-attachments/assets/2c2d84b9-127e-4257-a5e4-cac54c557944" alt="Muly" width="170">
+<img src="https://github.com/user-attachments/assets/28f5b8e7-aa4b-4045-84a1-a84d29fe4a8c" alt="Muly" width="170">
+
 <h1>aMuTorrent on Termux</h1> 
 P2P Suite in Your Pocket
 
