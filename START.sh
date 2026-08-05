@@ -87,7 +87,7 @@ if [ "$SKIP_ARR" -eq 0 ]; then
 fi
 
 echo "Iniciando aMule"
-nohup proot-distro login debian -- bash -c "cd '$BASE/bin/aMule' && chmod +x $AMULE_BIN && ./$AMULE_BIN --config-dir='$BASE/conf/aMule'" > "$BASE/conf/amule.log" 2>&1 &
+nohup proot-distro login debian -- bash -c "cd '$BASE/bin/aMule' && chmod +x $AMULE_BIN && ./$AMULE_BIN --config-dir='$BASE/conf/aMule'" &
 
 
 (sleep 20s && /data/data/com.termux/files/usr/bin/termux-open "localhost:4000") &>/dev/null &
