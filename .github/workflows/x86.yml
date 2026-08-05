@@ -1,0 +1,111 @@
+name: amuled x86
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  UPSTREAM_REPO: https://github.com/amule-org/amule.git
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone amule-org/amule
+        run: git clone --depth=1 "${{ env.UPSTREAM_REPO }}" amule-src
+
+      - name: Resolve upstream commit
+        id: upstream
+        run: |
+          cd amule-src
+          echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/386
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Restore Docker layer cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/buildx-cache
+          key: buildx-x86-static-${{ hashFiles('amule-src/packaging/linux/versions.env') }}-${{ github.run_id }}
+          restore-keys: |
+            buildx-x86-static-${{ hashFiles('amule-src/packaging/linux/versions.env') }}-
+            buildx-x86-static-
+
+      - name: Load pinned dependency versions
+        id: versions
+        run: |
+          set -a
+          . amule-src/packaging/linux/versions.env
+          set +a
+          {
+            echo "alpine_static_base=${ALPINE_STATIC_BASE}"
+            echo "wx_version=${WX_VERSION}"
+            echo "wx_tarball_url=${WX_TARBALL_URL}"
+            echo "wx_sha256=${WX_SHA256}"
+            echo "cryptopp_tag_suffix=${CRYPTOPP_TAG_SUFFIX}"
+            echo "libupnp_version=${LIBUPNP_VERSION}"
+            echo "libupnp_tarball_url=${LIBUPNP_TARBALL_URL}"
+            echo "libupnp_sha256=${LIBUPNP_SHA256}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build static amuled (linux/386)
+        run: |
+          mkdir -p out /tmp/buildx-cache
+          docker buildx build \
+            --platform linux/386 \
+            -f amule-src/packaging/linux/static/Dockerfile \
+            --build-arg "ALPINE_STATIC_BASE=${{ steps.versions.outputs.alpine_static_base }}" \
+            --build-arg "WX_VERSION=${{ steps.versions.outputs.wx_version }}" \
+            --build-arg "WX_TARBALL_URL=${{ steps.versions.outputs.wx_tarball_url }}" \
+            --build-arg "WX_SHA256=${{ steps.versions.outputs.wx_sha256 }}" \
+            --build-arg "CRYPTOPP_TAG_SUFFIX=${{ steps.versions.outputs.cryptopp_tag_suffix }}" \
+            --build-arg "LIBUPNP_VERSION=${{ steps.versions.outputs.libupnp_version }}" \
+            --build-arg "LIBUPNP_TARBALL_URL=${{ steps.versions.outputs.libupnp_tarball_url }}" \
+            --build-arg "LIBUPNP_SHA256=${{ steps.versions.outputs.libupnp_sha256 }}" \
+            --cache-from "type=local,src=/tmp/buildx-cache" \
+            --cache-to "type=local,dest=/tmp/buildx-cache-new,mode=max" \
+            --output "type=local,dest=out" \
+            amule-src
+          test -f out/amuled
+          rm -rf /tmp/buildx-cache
+          mv /tmp/buildx-cache-new /tmp/buildx-cache
+
+      - name: Verify the binary
+        run: |
+          file out/amuled
+          file out/amuled | grep -qi 'statically linked' \
+            || echo "::warning::'file' didn't report static linkage — verify manually if unsure."
+
+      - name: Install into repo path
+        run: |
+          mkdir -p bin/aMule
+          cp out/amuled bin/aMule/aMuleDx86.bin
+          chmod +x bin/aMule/aMuleDx86.bin
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f bin/aMule/aMuleDx86.bin
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update aMuleD x86 experimental (amule-org/amule@${{ steps.upstream.outputs.sha }})"
+            for i in 1 2 3 4 5; do
+              git pull --rebase origin "${GITHUB_REF_NAME}" && git push && break
+              sleep $((RANDOM % 10 + 1))
+            done
+          fi
