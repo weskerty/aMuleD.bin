@@ -137,6 +137,22 @@ To solve this, you need to perform some extra steps to fix it.
 ### Battery
 Set the battery charging limit to 70% or lower. This prevents the battery from swelling. Some phones have this option in their battery settings; those that don't can adjust it with root access.
 
+On Termux Root:
+sudo cat /sys/class/power_supply/battery/uevent
+```
+POWER_SUPPLY_STATUS=Not charging
+POWER_SUPPLY_CHARGING_ENABLED=0
+POWER_SUPPLY_CURRENT_NOW=0
+POWER_SUPPLY_CHARGE_CONTROL_LIMIT_MAX=9
+POWER_SUPPLY_CHARGE_CONTROL_LIMIT=0
+POWER_SUPPLY_VOLTAGE_NOW=4008159
+POWER_SUPPLY_VOLTAGE_MAX=4400000
+```
+
+This is happening on a Redmi Note 8. When the maximum charge is set to 70%, it stays at a stable voltage of 4.0V, which is low degradation. In this situation, the phone acts like a UPS; the battery isn't receiving power and remains inactive, as if disconnected.
+
+In fact, you can disconnect the battery and the phone will remain powered on (as long as the screen doesn't turn on).
+
 Or you can also make a direct connection [Tutorial ↗️](https://blog.kedio.co/post/how-to-run-a-oneplus-6t-without-battery/)
 
 #### Optional Accessories
