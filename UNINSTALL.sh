@@ -15,6 +15,10 @@ if [ "$CONFIRMA" != "si" ] && [ "$CONFIRMA" != "yes" ]; then
 fi
 
 echo "Adios"
+SVC_DIR="$PREFIX/var/service"
+for s in prowlarr transmission sonarr radarr; do
+  sv down "$SVC_DIR/$s" 2>/dev/null
+done
 sv-disable prowlarr transmission sonarr radarr 2>/dev/null
 pkill runsv 2>/dev/null
 pkill runsvdir 2>/dev/null
@@ -35,5 +39,10 @@ rm -rf "$BASE"
 echo "Desinstalando programas"
 pkg uninstall -y prowlarr transmission sonarr radarr
 #proot-distro remove debian
+
+echo "runit sv-disable"
+for s in prowlarr transmission sonarr radarr; do
+  rm -rf "$SVC_DIR/$s" "$PREFIX/var/log/sv/$s"
+done
 
 echo "Desinstalacion completa :l"
