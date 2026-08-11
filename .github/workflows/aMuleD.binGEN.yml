@@ -21,23 +21,23 @@ jobs:
             platform: linux/arm/v7
             runner: ubuntu-24.04
             needs_qemu: true
-            output_path: bin/aMule/aMuleDARMv7.bin
+            arch_label: ARMv7
           - arch: arm64
             platform: linux/arm64
             runner: ubuntu-24.04-arm
             needs_qemu: false
-            output_path: bin/aMule/aMuleDARM64.bin
+            arch_label: ARM64
           - arch: x86_64
             platform: linux/amd64
             runner: ubuntu-24.04
             needs_qemu: false
-            output_path: bin/aMule/aMuleDx86_64.bin
+            arch_label: x86_64
           - arch: x86
             platform: linux/386
             runner: ubuntu-24.04
             needs_qemu: true
             qemu_platforms: linux/386
-            output_path: bin/aMule/aMuleDx86.bin
+            arch_label: x86
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout this repo
@@ -89,7 +89,7 @@ jobs:
             echo "libupnp_sha256=${LIBUPNP_SHA256}"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Build static amuled
+      - name: Build static aMule binaries
         run: |
           mkdir -p out /tmp/buildx-cache
           docker buildx build \
@@ -108,30 +108,40 @@ jobs:
             --output "type=local,dest=out" \
             amule-src
           test -f out/amuled
+          test -f out/amuleapi
+          test -f out/amulecmd
           rm -rf /tmp/buildx-cache
           mv /tmp/buildx-cache-new /tmp/buildx-cache
 
-      - name: Verify the binary
+      - name: Verify the binaries
         run: |
-          file out/amuled
-          file out/amuled | grep -qi 'statically linked' \
-            || echo "::warning::'file' didn't report static linkage — verify manually if unsure."
+          for b in amuled amuleapi amulecmd; do
+            file "out/${b}"
+            file "out/${b}" | grep -qi 'statically linked' \
+              || echo "::warning::'${b}' didn't report static linkage — verify manually if unsure."
+          done
 
       - name: Install into repo path
         run: |
-          mkdir -p "$(dirname "${{ matrix.output_path }}")"
-          cp out/amuled "${{ matrix.output_path }}"
-          chmod +x "${{ matrix.output_path }}"
+          mkdir -p bin/aMule
+          cp out/amuled   "bin/aMule/aMuleD${{ matrix.arch_label }}.bin"
+          cp out/amuleapi "bin/aMule/aMuleAPI${{ matrix.arch_label }}.bin"
+          cp out/amulecmd "bin/aMule/aMuleCMD${{ matrix.arch_label }}.bin"
+          chmod +x bin/aMule/aMuleD${{ matrix.arch_label }}.bin \
+                   bin/aMule/aMuleAPI${{ matrix.arch_label }}.bin \
+                   bin/aMule/aMuleCMD${{ matrix.arch_label }}.bin
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f "${{ matrix.output_path }}"
+          git add -f "bin/aMule/aMuleD${{ matrix.arch_label }}.bin" \
+                     "bin/aMule/aMuleAPI${{ matrix.arch_label }}.bin" \
+                     "bin/aMule/aMuleCMD${{ matrix.arch_label }}.bin"
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update aMuleD ${{ matrix.arch }} (amule-org/amule@${{ steps.upstream.outputs.sha }})"
+            git commit -m "Update aMule ${{ matrix.arch }} binaries (amule-org/amule@${{ steps.upstream.outputs.sha }})"
             for i in 1 2 3 4 5; do
               git pull --rebase origin "${GITHUB_REF_NAME}" && git push && break
               sleep $((RANDOM % 10 + 1))
