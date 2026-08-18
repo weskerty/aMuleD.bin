@@ -155,6 +155,13 @@ In fact, you can disconnect the battery and the phone will remain powered on (as
 
 Or you can also make a direct connection [Tutorial ↗️](https://blog.kedio.co/post/how-to-run-a-oneplus-6t-without-battery/)
 
+# Auto PowerOn
+
+/system/etc/init/off_mode_charge.rc
+
+on charger
+    setprop sys.powerctl reboot,leaving-off-mode-charging
+
 #### Optional Accessories
 [USB OTG + Charging ↗️](https://www.aliexpress.us/item/3256807082682341.html?gatewayAdapt=glo2usa)
 
