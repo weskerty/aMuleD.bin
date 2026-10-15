@@ -149,6 +149,55 @@ POWER_SUPPLY_VOLTAGE_NOW=4008159
 POWER_SUPPLY_VOLTAGE_MAX=4400000
 ```
 
+### LimitCharge:
+
+create file on /data/adb/service.d/
+
+name: limit.sh
+
+
+Paste:
+```
+#!/system/bin/sh
+LIMIT=60     
+RESUME=30    
+B=/sys/class/power_supply/battery
+
+(
+  while true; do
+    cap=$(cat $B/capacity)
+    if [ "$cap" -ge "$LIMIT" ]; then
+      echo 0 > $B/charging_enabled
+    elif [ "$cap" -le "$RESUME" ]; then
+      echo 1 > $B/charging_enabled
+    fi
+    sleep 200
+  done
+) &
+```
+
+```
+chmod 755 /data/adb/service.d/limit.sh
+```
+### Auto PowerON:
+```
+fastboot oem off-mode-charge 0
+```
+or:
+
+create file on /system/etc/init/
+
+namefile: poweron.rc
+Paste:
+```
+on charger
+    setprop sys.powerctl reboot,leaving-off-mode-charging
+```
+```
+chmod 755  /system/etc/init/poweron.rc
+```
+
+
 This is happening on a Redmi Note 8. When the maximum charge is set to 70%, it stays at a stable voltage of 4.0V, which is low degradation. In this situation, the phone acts like a UPS; the battery isn't receiving power and remains inactive, as if disconnected.
 
 In fact, you can disconnect the battery and the phone will remain powered on (as long as the screen doesn't turn on).
